@@ -8,11 +8,11 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 object StreamingApp {
 
   def main(args: Array[String]): Unit = {
-    val sparkConf = new SparkConf().setAppName("KafkaWordCount").set("spark.ui.port", "8080")
+    val sparkConf = new SparkConf().setAppName("KafkaOrders").set("spark.ui.port", "8081")
     val ssc = new StreamingContext(sparkConf, Seconds(1))
 
     val kafkaParams = Map[String, Object](
-      "bootstrap.servers" -> "localhost:9092",
+      "bootstrap.servers" -> "kafka:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
       "group.id" -> "OrdersStream",
