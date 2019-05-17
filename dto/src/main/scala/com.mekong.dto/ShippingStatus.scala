@@ -1,5 +1,5 @@
 package com.mekong.dto
 
-import java.time.LocalDateTime
+import java.time.Instant
 
-case class ShippingStatus(orderId:String, status:String, changeDate: LocalDateTime)
+case class ShippingStatus(orderId: Id[Order], status: String, changeDate: Instant)
