@@ -15,7 +15,6 @@ abstract class BaseConsumer (conf:Config, topicConfig:String){
   protected var _server : String = ""
   protected var _group : String  = ""
   protected var _topic : String = ""
-	protected var ssc : StreamingContext = null
 
 
   def getBasicStringStringConsumer() : Properties = {
@@ -36,14 +35,5 @@ abstract class BaseConsumer (conf:Config, topicConfig:String){
     this._server = conf.getString("kafka.server")
 		this._group = conf.getString("kafka.group")
 		this._topic = conf.getString(topicConfig)		
-  }
-
-
-  def stop(): Unit ={
-    if(this.ssc!=null) {
-      this.ssc.stop()
-      this.ssc.awaitTerminationOrTimeout(1000)
-      this.ssc = null
-    }
   }
 }

@@ -7,20 +7,9 @@ import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, Loca
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
-class OrderConsumer(conf: Config) extends BaseConsumer(conf, "kafka.order") {
+class OrderConsumer(conf: Config, ssc: StreamingContext ) extends BaseConsumer(conf, "kafka.order") {
 
   {
-    val sparkConf = new SparkConf()
-      .setAppName("OrderStreamingFromRDD")
-      .setMaster("local[*]")
-
-    sparkConf.set("es.index.auto.create", "true")
-    sparkConf.set("es.mapping.id", "id")
-    val sc = new SparkContext(sparkConf)
-
-    // streams will produce data every second
-    this.ssc = new StreamingContext(sc, Seconds(1))
-
     // Create the stream.
     val props: Properties = this.getBasicStringStringConsumer()
 
@@ -47,6 +36,5 @@ class OrderConsumer(conf: Config) extends BaseConsumer(conf, "kafka.order") {
       }
     })
 
-    this.ssc.start()
   }
 }
