@@ -9,15 +9,22 @@ object Producer {
   }
 
   def writeToKafka(topic: String): Unit = {
+
     val props = new Properties()
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
     props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getName)
     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getName)
     val producer = new KafkaProducer[String, String](props)
-    val record = new ProducerRecord[String, String](topic, "key", "valueaaa")
-    val result = producer.send(record).get()
-    println(result)
-    producer.flush()
+
+    var count = 0
+    while (true) {
+      count += 1
+      val record = new ProducerRecord[String, String](topic, s"key $count", s"value $count")
+      val result = producer.send(record).get()
+      println(result)
+      producer.flush()
+      Thread.sleep(1000)
+    }
     producer.close()
   }
 }

@@ -1,3 +1,7 @@
+import com.mekong.dto.ShippingAddress
+
+import scala.util.Random
+
 object DB {
 
   val STATES = Array("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
@@ -8,4 +12,17 @@ object DB {
     "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming")
 
 
+  val USERS = generateUsersList()
+
+  def generateUsersList(): Map[String, ShippingAddress] = {
+    var result = Map[String, ShippingAddress]()
+
+    val random = new Random()
+    for (i <- 0 until 10000) {
+      val user = s"user-$i"
+      val address = new ShippingAddress("address", "city", "", zipCode = "zipCode", STATES(random.nextInt(50)))
+      result += (user -> address)
+    }
+    result
+  }
 }

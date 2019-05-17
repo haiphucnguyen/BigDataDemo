@@ -10,14 +10,8 @@ import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializ
 import java.util.Properties
 import java.util.Arrays
 
-class ShippingConsumer (conf : Config) extends BaseConsumer(conf,"kafka.shipping") {
+class ShippingConsumer (conf : Config,ssc : StreamingContext) extends BaseConsumer(conf,"kafka.shipping") {
  	{
-    val streamconf = new SparkConf().setAppName("ShippingStreamingFromRDD").setMaster(this._server)
-    val sc = new SparkContext(streamconf)
-
-    // streams will produce data every second
-    this.ssc = new StreamingContext(sc, Seconds(1))
-
     // Create the stream.
     val props: Properties = this.getBasicStringStringConsumer()
 
@@ -45,6 +39,5 @@ class ShippingConsumer (conf : Config) extends BaseConsumer(conf,"kafka.shipping
       }
     })
 
-    this.ssc.start()
  	}
 }
