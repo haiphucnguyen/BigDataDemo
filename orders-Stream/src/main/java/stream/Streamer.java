@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
+import com.mekong.dto.Cart;
+import com.mekong.dto.ShippingStatus;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
@@ -22,22 +24,18 @@ public class Streamer {
 	
 	private String server;
 	private String orderTopic;
-	private String shipingTopic;	
 	private String shipingStatusTopic;
-	
 	private Producer<String, String> producer;
  
 	
 	public Streamer(Config conf) {
 		server = conf.getString("kafka.server");
 		orderTopic = conf.getString("kafka.order");
-		shipingTopic = conf.getString("kafka.shipping");
 		shipingStatusTopic = conf.getString("kafka.shippingstatus");
-		this.ensureTopic(shipingTopic);
 		this.ensureTopic(orderTopic);
 		this.ensureTopic(shipingStatusTopic);		
 		this.createProducers();
-		logger.info("streamer {} {} {}", this.server, this.orderTopic, this.shipingTopic);
+		logger.info("streamer {} {}", this.server, this.orderTopic);
 	}	
 	
 	private static final Logger logger = LoggerFactory.getLogger(Streamer.class);
@@ -81,21 +79,15 @@ public class Streamer {
 		}
 	}
 	
-	public boolean sendOrder(models.Order order) {
+	public boolean sendCart(Cart cart) {
 		logger.info("Sending order message");
-		String data = gson.toJson(order);
-		return this.sendData(this.orderTopic, order.getNumber(), data);
+		String data = gson.toJson(cart);
+		return this.sendData(this.orderTopic, cart.cartId(), data);
 	}	
 	
-	public boolean sendShipping(models.Shipping shipping) {
-		logger.info("Sending shipping message");
-		String data = gson.toJson(shipping);
-		return this.sendData(this.shipingTopic, shipping.getNumber(), data);
-	}
-	
-	public boolean sendShippingStatus(models.ShippingStatus status) {
+	public boolean sendShippingStatus(ShippingStatus status) {
 		logger.info("Sending shipping status message");
 		String data = gson.toJson(status);
-		return this.sendData(this.shipingStatusTopic, "" + status.getId(), data);
+		return this.sendData(this.shipingStatusTopic, "" + status.orderId(), data);
 	}
 }
