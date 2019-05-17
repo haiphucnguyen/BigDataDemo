@@ -1,5 +1,6 @@
 import java.time
-import java.time.{LocalDate, LocalDateTime}
+import java.time.temporal.ChronoUnit
+import java.time.{Instant, LocalDate, LocalDateTime}
 
 import com.mekong.dto._
 import com.typesafe.config.ConfigFactory
@@ -19,7 +20,7 @@ object App {
       val items=new ArrayBuffer[Order]();
       for(i <-0 to 5) {
         val item = new Order(
-          RandomStringUtils.randomAlphabetic(10),
+          Id[Order](RandomStringUtils.randomAlphabetic(10)),
           RandomStringUtils.randomAlphabetic(10),
           RandomStringUtils.randomAlphabetic(10),
           RandomUtils.nextDouble(),
@@ -30,31 +31,25 @@ object App {
 
 
       val cart = new Cart(
+        Id[Cart](RandomStringUtils.randomAlphabetic(10)),
         RandomStringUtils.randomAlphabetic(10),
-        RandomStringUtils.randomAlphabetic(10),
-        LocalDateTime.now(),
-        LocalDate.now().plusDays(3),
-        new Address(RandomStringUtils.randomAlphabetic(10),
-                    RandomStringUtils.randomAlphabetic(10),
-                    RandomStringUtils.randomAlphabetic(10),
-                    RandomStringUtils.randomAlphabetic(10)),
+        Instant.now(),
+        Instant.now().plus(3, ChronoUnit.DAYS),
         items.toList
       );
       streamer.sendCart(cart);
 
 
       items.foreach(i => {
-          val shipping = new ShippingStatus(
-            RandomStringUtils.randomAlphabetic(5),
-            "New",
-            LocalDateTime.now(),
-            new Address(RandomStringUtils.randomAlphabetic(10),
+          val shipping =
+            new ShippingAddress(
+              cart.cardId,
               RandomStringUtils.randomAlphabetic(10),
               RandomStringUtils.randomAlphabetic(10),
-              RandomStringUtils.randomAlphabetic(10))
+              RandomStringUtils.randomAlphabetic(10),
+              RandomStringUtils.randomAlphabetic(10)
           );
-
-          streamer.sendShippingStatus(shipping);
+          streamer.sendShipping(shipping);
       });
     }
   }

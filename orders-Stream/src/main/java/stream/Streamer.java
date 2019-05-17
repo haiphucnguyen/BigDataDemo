@@ -4,8 +4,12 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
+import com.goyeau.kafka.streams.circe.CirceSerdes;
 import com.mekong.dto.Cart;
+import com.mekong.dto.Id;
+import com.mekong.dto.ShippingAddress;
 import com.mekong.dto.ShippingStatus;
+import io.circe.Encoder;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
@@ -14,6 +18,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.Serializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +31,7 @@ public class Streamer {
 	private String orderTopic;
 	private String shipingStatusTopic;
 	private Producer<String, String> producer;
- 
-	
+
 	public Streamer(Config conf) {
 		server = conf.getString("kafka.server");
 		orderTopic = conf.getString("kafka.order");
@@ -60,10 +64,8 @@ public class Streamer {
 	private void createProducers() {
 		Properties props = new Properties();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
-		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-				"org.apache.kafka.common.serialization.StringSerializer");
-		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-				"org.apache.kafka.common.serialization.StringSerializer");
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 		this.producer = new KafkaProducer<>(props);
 	}
 	
@@ -78,13 +80,17 @@ public class Streamer {
 			return false;
 		}
 	}
-	
+
 	public boolean sendCart(Cart cart) {
 		logger.info("Sending order message");
-		String data = gson.toJson(cart);
-		return this.sendData(this.orderTopic, cart.cartId(), data);
-	}	
-	
+		return this.sendData(this.orderTopic, cart.cardId().toString(), gson.toJson(cart));
+	}
+
+	public boolean sendShipping(ShippingAddress shipping) {
+		logger.info("Sending order message");
+		return this.sendData(this.orderTopic, shipping.cartId().toString(), gson.toJson(shipping));
+	}
+
 	public boolean sendShippingStatus(ShippingStatus status) {
 		logger.info("Sending shipping status message");
 		String data = gson.toJson(status);
