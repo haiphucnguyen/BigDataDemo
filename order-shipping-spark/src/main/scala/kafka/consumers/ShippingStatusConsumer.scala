@@ -7,15 +7,9 @@ import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, Loca
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
-class ShippingStatusConsumer(conf : Config) extends BaseConsumer(conf,"kafka.shippingstatus") {
+class ShippingStatusConsumer(conf : Config,ssc : StreamingContext) extends BaseConsumer(conf,"kafka.shippingstatus") {
  	{
-    val streamconf = new SparkConf().setAppName("ShippingStatusStreamingFromRDD").setMaster(this._server)
-    val sc = new SparkContext(streamconf)
-
-    // streams will produce data every second
-    this.ssc = new StreamingContext(sc, Seconds(1))
-
-    // Create the stream.
+   // Create the stream.
     val props: Properties = this.getBasicStringStringConsumer()
 
     val kafkaStream =
@@ -42,6 +36,5 @@ class ShippingStatusConsumer(conf : Config) extends BaseConsumer(conf,"kafka.shi
       }
     })
 
-    this.ssc.start()
  	}
 }

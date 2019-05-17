@@ -32,7 +32,7 @@ public class Streamer {
 		server = conf.getString("kafka.server");
 		orderTopic = conf.getString("kafka.order");
 		shipingTopic = conf.getString("kafka.shipping");
-		shipingStatusTopic = conf.getString("kafka.shipping-status");
+		shipingStatusTopic = conf.getString("kafka.shippingstatus");
 		this.ensureTopic(shipingTopic);
 		this.ensureTopic(orderTopic);
 		this.ensureTopic(shipingStatusTopic);		

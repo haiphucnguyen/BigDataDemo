@@ -21,19 +21,19 @@ public class App {
 		Streamer streamer = new Streamer(conf);
 		for(int loop=0;loop<100;loop++) {
 			Order order = new Order();
-			order.setNumber(RandomStringUtils.random(10));
-			order.setUser(RandomStringUtils.random(10));
+			order.setNumber(RandomStringUtils.randomAlphabetic(10));
+			order.setUser(RandomStringUtils.randomAlphabetic(10));
 			order.setDate(new Date());
-			order.setCity(RandomStringUtils.random(5));
-			order.setState(RandomStringUtils.random(2));
-			order.setZipcode(RandomStringUtils.random(5));
+			order.setCity(RandomStringUtils.randomAlphabetic(5));
+			order.setState(RandomStringUtils.randomAlphabetic(2));
+			order.setZipcode(RandomStringUtils.randomAlphabetic(5));
 			
 			for(int i=0;i<5;i++) {
 				OrderItem item = new OrderItem();
 				item.setAmount(RandomUtils.nextInt(1,11));
 				item.setPrice(RandomUtils.nextFloat((float)0.4999999, 1000));
 				item.setProductid(RandomUtils.nextInt(1,1000));
-				item.setProduct(RandomStringUtils.random(20));
+				item.setProduct(RandomStringUtils.randomAlphabetic(20));
 				order.getItems().add(item);
 			}
 			streamer.sendOrder(order);
@@ -43,9 +43,9 @@ public class App {
 			shipping.setNumber(order.getNumber());
 			shipping.setUser(order.getUser());
 			shipping.setExpectedDate(new Date());
-			shipping.setCity(RandomStringUtils.random(5));
-			shipping.setState(RandomStringUtils.random(2));
-			shipping.setZipcode(RandomStringUtils.random(5));
+			shipping.setCity(RandomStringUtils.randomAlphabetic(5));
+			shipping.setState(RandomStringUtils.randomAlphabetic(2));
+			shipping.setZipcode(RandomStringUtils.randomAlphabetic(5));
 			
 			for(int i=0;i<5;i++) {
 				order.getItems().add(order.getItems().get(i));
@@ -55,9 +55,10 @@ public class App {
 			
 			for(int i=0;i<2;i++) {
 				ShippingStatus status = new ShippingStatus();
+				status.setId(RandomUtils.nextInt());
 				status.setNumber(shipping.getNumber());
 				status.setDate(new Date());
-				status.setStatus(RandomStringUtils.random(5));
+				status.setStatus(RandomStringUtils.randomAlphabetic(5));
 				streamer.sendShippingStatus(status);	
 			}
 		}
