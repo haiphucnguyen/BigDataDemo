@@ -33,10 +33,11 @@ public class Streamer {
 		orderTopic = conf.getString("kafka.order");
 		shipingTopic = conf.getString("kafka.shipping");
 		shipingStatusTopic = conf.getString("kafka.shipping-status");
-		this.ensureTopic(orderTopic);
 		this.ensureTopic(shipingTopic);
+		this.ensureTopic(orderTopic);
 		this.ensureTopic(shipingStatusTopic);		
 		this.createProducers();
+		logger.info("streamer {} {} {}", this.server, this.orderTopic, this.shipingTopic);
 	}	
 	
 	private static final Logger logger = LoggerFactory.getLogger(Streamer.class);

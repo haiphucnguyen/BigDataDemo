@@ -13,8 +13,13 @@ import java.util.Arrays
 class OrderConsumer(conf : Config) extends BaseConsumer(conf,"kafka.order") {
  	
  	{
-    val streamConf = new SparkConf().setAppName("OrderStreamingFromRDD").setMaster(this._server)
-    val sc = new SparkContext(streamConf)
+    val sparkConf = new SparkConf()
+      .setAppName("OrderStreamingFromRDD")
+      .setMaster("local[*]")
+
+    sparkConf.set("es.index.auto.create", "true")
+    sparkConf.set("es.mapping.id", "id")
+    val sc = new SparkContext(sparkConf)
 
     // streams will produce data every second
     this.ssc = new StreamingContext(sc, Seconds(1))
