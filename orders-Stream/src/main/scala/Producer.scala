@@ -1,7 +1,10 @@
-import java.util.Properties
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.util.{Properties, UUID}
 
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
-import org.apache.kafka.common.serialization.StringSerializer
+import com.goyeau.kafka.streams.circe.CirceSerdes
+import com.mekong.dto.{Cart, Id}
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
 
 object Producer {
   def main(args: Array[String]): Unit = {
@@ -9,22 +12,23 @@ object Producer {
   }
 
   def writeToKafka(topic: String): Unit = {
-
     val props = new Properties()
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
-    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getName)
-    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getName)
-    val producer = new KafkaProducer[String, String](props)
+    val producer = new KafkaProducer(props,
+      CirceSerdes.serializer[Id[Cart]],
+      CirceSerdes.serializer[Cart])
 
-    var count = 0
-    while (true) {
-      count += 1
-      val record = new ProducerRecord[String, String](topic, s"key $count", s"value $count")
-      val result = producer.send(record).get()
-      println(result)
-      producer.flush()
-      Thread.sleep(1000)
-    }
-    producer.close()
+    val cart = Cart(Id[Cart](UUID.randomUUID().toString), "user", Instant.now(),
+      deliveredOn = Instant.now().plus(2, ChronoUnit.DAYS), null)
+    //    var count = 0
+    //    while (true) {
+    //      count += 1
+    //      val record = new ProducerRecord[Id[Cart], Cart](topic, null, null)
+    //      val result = producer.send(record).get()
+    //      println(result)
+    //      producer.flush()
+    //      Thread.sleep(1000)
+    //    }
+    //    producer.close()
   }
 }

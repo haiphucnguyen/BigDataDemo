@@ -1,6 +1,6 @@
 package com.mekong.dto
 
-import java.time.{LocalDate, LocalDateTime}
+import java.time.Instant
 
-case class Cart(userId: String, cartId: String, issuedTimestamp: LocalDateTime, deliveredOn: LocalDate,
+case class Cart(cardId: Id[Cart], userId: String, issuedTimestamp: Instant, deliveredOn: Instant,
                 orders: List[Order])
