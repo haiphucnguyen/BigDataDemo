@@ -1,18 +1,15 @@
 package kafka.consumers
 
-import com.typesafe.config.Config
+import java.util.{Arrays, Properties}
 
+import com.typesafe.config.Config
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
-import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
-import java.util.Properties
-import java.util.Arrays
 
-class OrderConsumer(conf : Config) extends BaseConsumer(conf,"kafka.order") {
- 	
- 	{
+class OrderConsumer(conf: Config) extends BaseConsumer(conf, "kafka.order") {
+
+  {
     val sparkConf = new SparkConf()
       .setAppName("OrderStreamingFromRDD")
       .setMaster("local[*]")
@@ -51,5 +48,5 @@ class OrderConsumer(conf : Config) extends BaseConsumer(conf,"kafka.order") {
     })
 
     this.ssc.start()
- 	}
+  }
 }
