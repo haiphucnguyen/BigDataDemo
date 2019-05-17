@@ -1,15 +1,28 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+
+import com.mekong.dto.Address;
+import com.mekong.dto.Cart;
+import com.mekong.dto.Order;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
+import scala.Function1;
+import scala.Function2;
+import scala.PartialFunction;
+import scala.Tuple2;
+import scala.collection.*;
+import scala.collection.Iterable;
+import scala.collection.generic.CanBuildFrom;
+import scala.collection.immutable.List;
+import scala.collection.immutable.Seq;
+import scala.collection.immutable.Traversable;
 import stream.Streamer;
-import models.Order;
-import models.OrderItem;
-import models.Shipping;
-import models.ShippingStatus;
 
 public class App {
 
@@ -20,21 +33,27 @@ public class App {
 		
 		Streamer streamer = new Streamer(conf);
 		for(int loop=0;loop<100;loop++) {
-			Order order = new Order();
-			order.setNumber(RandomStringUtils.randomAlphabetic(10));
-			order.setUser(RandomStringUtils.randomAlphabetic(10));
-			order.setDate(new Date());
-			order.setCity(RandomStringUtils.randomAlphabetic(5));
-			order.setState(RandomStringUtils.randomAlphabetic(2));
-			order.setZipcode(RandomStringUtils.randomAlphabetic(5));
-			
+			Cart cart = new Cart(
+					RandomStringUtils.randomAlphabetic(10),
+					RandomStringUtils.randomAlphabetic(10),
+					LocalDateTime.now(),
+					LocalDate.now().plusDays(3),
+					new Address(RandomStringUtils.randomAlphabetic(10),
+							RandomStringUtils.randomAlphabetic(10),
+							RandomStringUtils.randomAlphabetic(10),
+							RandomStringUtils.randomAlphabetic(10)),
+					JavaConversions.asScalaBuffer(new ArrayList<Order>()).toList()
+			);
 			for(int i=0;i<5;i++) {
-				OrderItem item = new OrderItem();
-				item.setAmount(RandomUtils.nextInt(1,11));
-				item.setPrice(RandomUtils.nextFloat((float)0.4999999, 1000));
-				item.setProductid(RandomUtils.nextInt(1,1000));
-				item.setProduct(RandomStringUtils.randomAlphabetic(20));
-				order.getItems().add(item);
+				Order item = new Order(
+						RandomStringUtils.randomAlphabetic(10),
+						RandomStringUtils.randomAlphabetic(10),
+						RandomStringUtils.randomAlphabetic(10),
+						RandomUtils.nextDouble(),
+								RandomUtils.nextInt(1, 1000)
+
+				);
+				cart.orders().$plus$colon(item);
 			}
 			streamer.sendOrder(order);
 			
