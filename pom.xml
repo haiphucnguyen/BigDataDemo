@@ -12,11 +12,14 @@
 
     <modules>
         <module>orders-Stream</module>
+        <module>spark-stream</module>
         <module>dto</module>
         <module>order-shipping-spark</module>
     </modules>
     <properties>
         <scala.version>2.12.8</scala.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
