@@ -12,7 +12,7 @@ object StreamingApp {
     val ssc = new StreamingContext(sparkConf, Seconds(1))
 
     val kafkaParams = Map[String, Object](
-      "bootstrap.servers" -> "kafka:9092",
+      "bootstrap.servers" -> "kafka:9092,kafka:9093",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
       "group.id" -> "OrdersStream",
@@ -26,6 +26,10 @@ object StreamingApp {
       PreferConsistent,
       Subscribe[String, String](topics, kafkaParams)
     )
-    stream.map(record => (record.key, record.value))
+    stream.map(record => (record.key, record.value)).foreachRDD(r => println(r))
+    ssc.start()
+    ssc.awaitTermination()
+
+    ssc.stop()
   }
 }

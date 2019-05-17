@@ -20,8 +20,8 @@ object DB {
     val random = new Random()
     for (i <- 0 until 10000) {
       val user = s"user-$i"
-      val address = new ShippingAddress("address", "city", "", STATES(random.nextInt(50)))
-      result += (user -> address)
+//      val address = new ShippingAddress("address", "city", "", STATES(random.nextInt(50)))
+//      result += (user -> address)
     }
     result
   }
