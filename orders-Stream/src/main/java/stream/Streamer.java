@@ -3,6 +3,7 @@ package stream;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import com.goyeau.kafka.streams.circe.CirceSerdes;
 import com.mekong.dto.Cart;
@@ -14,10 +15,7 @@ import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.Serializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +29,14 @@ public class Streamer {
 	private String orderTopic;
 	private String shipingStatusTopic;
 	private Producer<String, String> producer;
+	private int sendingProceses = 0;
+	private Callback onDoneSendata = (RecordMetadata data, Exception exception) -> {
+		this.sendingProceses --;
+	};
+
+	public int getSendingProceses(){
+		return this.sendingProceses;
+	}
 
 	public Streamer(Config conf) {
 		server = conf.getString("kafka.server");
@@ -69,29 +75,23 @@ public class Streamer {
 		this.producer = new KafkaProducer<>(props);
 	}
 	
-	private boolean sendData(String topic, String id, String data) {
+	private Future<RecordMetadata> sendData(String topic, String id, String data) {
+		this.sendingProceses++;
 		ProducerRecord<String, String> record = new ProducerRecord<>(topic, id, data);
-		try {
-			this.producer.send(record).get();
-			return true;
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			logger.error("Sending message error {}", e.getMessage());
-			return false;
-		}
+		return this.producer.send(record, this.onDoneSendata);
 	}
 
-	public boolean sendCart(Cart cart) {
+	public Future<RecordMetadata> sendCart(Cart cart) {
 		logger.info("Sending order message");
 		return this.sendData(this.orderTopic, cart.cardId().toString(), gson.toJson(cart));
 	}
 
-	public boolean sendShipping(ShippingAddress shipping) {
+	public Future<RecordMetadata> sendShipping(ShippingAddress shipping) {
 		logger.info("Sending order message");
 		return this.sendData(this.orderTopic, shipping.cartId().toString(), gson.toJson(shipping));
 	}
 
-	public boolean sendShippingStatus(ShippingStatus status) {
+	public Future<RecordMetadata> sendShippingStatus(ShippingStatus status) {
 		logger.info("Sending shipping status message");
 		String data = gson.toJson(status);
 		return this.sendData(this.shipingStatusTopic, "" + status.orderId(), data);
