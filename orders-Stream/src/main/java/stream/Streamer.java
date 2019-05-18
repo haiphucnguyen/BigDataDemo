@@ -5,10 +5,6 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import com.mekong.dto.Cart;
-import com.mekong.dto.Id;
-import com.mekong.dto.ShippingAddress;
-import com.mekong.dto.ShippingStatus;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
@@ -16,12 +12,12 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
 import com.typesafe.config.Config;
 
 public class Streamer {
-	
+
+
+
 	private String server;
 	private String orderTopic;
 	private String shippingTopic;
@@ -48,7 +44,7 @@ public class Streamer {
 	}	
 	
 	private static final Logger logger = LoggerFactory.getLogger(Streamer.class);
-	private static Gson gson = new Gson();
+
 	
 	private void ensureTopic(String topic) {
 		Properties props = new Properties();
@@ -73,26 +69,23 @@ public class Streamer {
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 		this.producer = new KafkaProducer<>(props);
 	}
-	
+
 	private Future<RecordMetadata> sendData(String topic, String id, String data) {
 		this.sendingProceses++;
+		logger.info("Sending {} {}", topic, data);
 		ProducerRecord<String, String> record = new ProducerRecord<>(topic, id, data);
 		return this.producer.send(record, this.onDoneSendata);
 	}
 
-	public Future<RecordMetadata> sendCart(Cart cart) {
-		logger.info("Sending order message");
-		return this.sendData(this.orderTopic, cart.cardId().toString(), gson.toJson(cart));
+	public Future<RecordMetadata> sendCart(String cart, String id) {
+		return this.sendData(this.orderTopic, id, cart);
 	}
 
-	public Future<RecordMetadata> sendShipping(ShippingAddress shipping) {
-		logger.info("Sending shipping message");
-		return this.sendData(this.shippingTopic, shipping.cartId().toString(), gson.toJson(shipping));
+	public Future<RecordMetadata> sendShipping(String shipping, String id) {
+		return this.sendData(this.shippingTopic, id, shipping);
 	}
 
-	public Future<RecordMetadata> sendShippingStatus(ShippingStatus status) {
-		logger.info("Sending shipping status message");
-		String data = gson.toJson(status);
-		return this.sendData(this.shipingStatusTopic, "" + status.orderId(), data);
+	public Future<RecordMetadata> sendShippingStatus(String status, String id) {
+		return this.sendData(this.shipingStatusTopic, id, status);
 	}
 }
