@@ -40,17 +40,15 @@ object App {
       streamer.sendCart(cart);
 
 
-      items.foreach(i => {
-          val shipping =
-            new ShippingAddress(
-              cart.cardId,
-              RandomStringUtils.randomAlphabetic(10),
-              RandomStringUtils.randomAlphabetic(10),
-              RandomStringUtils.randomAlphabetic(10),
-              RandomStringUtils.randomAlphabetic(10)
-          );
-          streamer.sendShipping(shipping);
-      });
+      val shipping =
+        new ShippingAddress(
+          cart.cardId,
+          RandomStringUtils.randomAlphabetic(10),
+          RandomStringUtils.randomAlphabetic(10),
+          RandomStringUtils.randomAlphabetic(10),
+          RandomStringUtils.randomAlphabetic(10)
+      );
+      streamer.sendShipping(shipping);
     }
   }
 }

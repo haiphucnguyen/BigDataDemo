@@ -29,17 +29,20 @@ public class Streamer {
 	
 	private String server;
 	private String orderTopic;
+	private String shippingTopic;
 	private String shipingStatusTopic;
 	private Producer<String, String> producer;
 
 	public Streamer(Config conf) {
 		server = conf.getString("kafka.server");
 		orderTopic = conf.getString("kafka.order");
+		shippingTopic = conf.getString("kafka.shipping");
 		shipingStatusTopic = conf.getString("kafka.shippingstatus");
 		this.ensureTopic(orderTopic);
+		this.ensureTopic(shippingTopic);
 		this.ensureTopic(shipingStatusTopic);		
 		this.createProducers();
-		logger.info("streamer {} {}", this.server, this.orderTopic);
+		logger.info("streamer {} {} {} {}", this.server, this.orderTopic, this.shippingTopic, this.shipingStatusTopic);
 	}	
 	
 	private static final Logger logger = LoggerFactory.getLogger(Streamer.class);
@@ -72,6 +75,8 @@ public class Streamer {
 	private boolean sendData(String topic, String id, String data) {
 		ProducerRecord<String, String> record = new ProducerRecord<>(topic, id, data);
 		try {
+			logger.error("Sending message {} {}",topic, id);
+
 			this.producer.send(record).get();
 			return true;
 		} catch (InterruptedException | ExecutionException e) {
@@ -87,8 +92,8 @@ public class Streamer {
 	}
 
 	public boolean sendShipping(ShippingAddress shipping) {
-		logger.info("Sending order message");
-		return this.sendData(this.orderTopic, shipping.cartId().toString(), gson.toJson(shipping));
+		logger.info("Sending shipping message");
+		return this.sendData(this.shippingTopic, shipping.cartId().toString(), gson.toJson(shipping));
 	}
 
 	public boolean sendShippingStatus(ShippingStatus status) {
