@@ -5,18 +5,15 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import com.goyeau.kafka.streams.circe.CirceSerdes;
 import com.mekong.dto.Cart;
 import com.mekong.dto.Id;
 import com.mekong.dto.ShippingAddress;
 import com.mekong.dto.ShippingStatus;
-import io.circe.Encoder;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.*;
-import org.apache.kafka.common.serialization.Serializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
