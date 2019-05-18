@@ -1,17 +1,16 @@
-package kafka.consumers
+package com.mekong.streaming.consumer
 
 import java.util.{Arrays, Properties}
 
 import com.typesafe.config.Config
+import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
-import org.apache.spark.streaming.{Seconds, StreamingContext}
-import org.apache.spark.{SparkConf, SparkContext}
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.LoggerFactory
 
-class OrderConsumer(conf: Config, ssc: StreamingContext ) extends BaseConsumer(conf, "kafka.order") {
-  private val logger = LoggerFactory.getLogger(classOf[OrderConsumer])
+class ShippingConsumer (conf : Config,ssc : StreamingContext) extends BaseConsumer(conf,"kafka.shipping") {
+  private val logger = LoggerFactory.getLogger(classOf[ShippingConsumer])
 
-  {
+ 	{
     // Create the stream.
     val props: Properties = this.getBasicStringStringConsumer()
 
@@ -23,6 +22,7 @@ class OrderConsumer(conf: Config, ssc: StreamingContext ) extends BaseConsumer(c
           Arrays.asList(this._topic),
           props.asInstanceOf[java.util.Map[String, Object]]
         )
+
       )
 
     // now, whenever this Kafka stream produces data the resulting RDD will be printed
@@ -38,5 +38,5 @@ class OrderConsumer(conf: Config, ssc: StreamingContext ) extends BaseConsumer(c
       }
     })
 
-  }
+ 	}
 }

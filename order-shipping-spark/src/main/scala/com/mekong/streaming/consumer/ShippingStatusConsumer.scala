@@ -1,21 +1,17 @@
-package kafka.consumers
+package com.mekong.streaming.consumer
+
+import java.util.{Arrays, Properties}
 
 import com.typesafe.config.Config
+import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
-import org.apache.spark.streaming.{Seconds, StreamingContext}
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
-import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
-import java.util.Properties
-import java.util.Arrays
-
 import org.slf4j.LoggerFactory
 
-class ShippingConsumer (conf : Config,ssc : StreamingContext) extends BaseConsumer(conf,"kafka.shipping") {
-  private val logger = LoggerFactory.getLogger(classOf[ShippingConsumer])
+class ShippingStatusConsumer(conf : Config,ssc : StreamingContext) extends BaseConsumer(conf,"kafka.shippingstatus") {
+  private val logger = LoggerFactory.getLogger(classOf[ShippingStatusConsumer])
 
- 	{
-    // Create the stream.
+  {
+   // Create the stream.
     val props: Properties = this.getBasicStringStringConsumer()
 
     val kafkaStream =

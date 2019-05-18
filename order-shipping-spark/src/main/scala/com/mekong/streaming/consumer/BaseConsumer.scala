@@ -1,14 +1,10 @@
-package kafka.consumers
+package com.mekong.streaming.consumer
+
+import java.util.Properties
 
 import com.typesafe.config.Config
-
-import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
-import org.apache.spark.streaming.{Seconds, StreamingContext}
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
-import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
-import java.util.Properties
-import java.util.Arrays
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.common.serialization.StringDeserializer
 
 
 abstract class BaseConsumer (conf:Config, topicConfig:String){

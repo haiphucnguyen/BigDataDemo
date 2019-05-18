@@ -1,7 +1,9 @@
+package com.mekong.streaming
+
+import com.mekong.streaming.consumer.{BaseConsumer, OrderConsumer, ShippingConsumer, ShippingStatusConsumer}
 import com.typesafe.config.ConfigFactory
-import kafka.consumers.{BaseConsumer, OrderConsumer, ShippingConsumer, ShippingStatusConsumer}
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -20,9 +22,9 @@ object App {
     val ssc = new StreamingContext(sc, Seconds(1))
 
     val consumers: ArrayBuffer[BaseConsumer] = new ArrayBuffer[BaseConsumer]()
-    consumers += new OrderConsumer(conf,ssc)
-    consumers += new ShippingConsumer(conf,ssc)
-    consumers += new ShippingStatusConsumer(conf,ssc)
+    consumers += new OrderConsumer(conf, ssc)
+    consumers += new ShippingConsumer(conf, ssc)
+    consumers += new ShippingStatusConsumer(conf, ssc)
 
     ssc.start()
     var input: String = ""
