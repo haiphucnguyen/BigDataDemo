@@ -76,23 +76,20 @@ public class Streamer {
 	
 	private Future<RecordMetadata> sendData(String topic, String id, String data) {
 		this.sendingProceses++;
+		logger.info("Sending {} {}", topic, data);
 		ProducerRecord<String, String> record = new ProducerRecord<>(topic, id, data);
 		return this.producer.send(record, this.onDoneSendata);
 	}
 
 	public Future<RecordMetadata> sendCart(Cart cart) {
-		logger.info("Sending order message");
 		return this.sendData(this.orderTopic, cart.cardId().toString(), gson.toJson(cart));
 	}
 
 	public Future<RecordMetadata> sendShipping(ShippingAddress shipping) {
-		logger.info("Sending shipping message");
 		return this.sendData(this.shippingTopic, shipping.cartId().toString(), gson.toJson(shipping));
 	}
 
 	public Future<RecordMetadata> sendShippingStatus(ShippingStatus status) {
-		logger.info("Sending shipping status message");
-		String data = gson.toJson(status);
-		return this.sendData(this.shipingStatusTopic, "" + status.orderId(), data);
+		return this.sendData(this.shipingStatusTopic, "" + status.orderId(), gson.toJson(status));
 	}
 }

@@ -1,5 +1,7 @@
 import org.apache.commons.lang3.{RandomStringUtils, RandomUtils}
 
+import scala.collection.mutable
+
 object ProductDB {
   val products = List(
     Map("id" -> "Apple iPhone 7 Plus 32 GB", "category" -> "Apple Iphone", "price" -> "479"),
@@ -26,7 +28,23 @@ object ProductDB {
     Map("id" -> "HP Touchscreen", "category" -> "HP Laptop", "price" -> "522")
   )
 
+  val prorities = new mutable.ListBuffer[Integer]
+  var totalP = 0
+  for(idx <- 0 to products.size){
+    val p = RandomUtils.nextInt(0, prorities.size * 10000)
+    prorities += p
+    totalP += p
+  }
+
   def nextRandom(): Map[String,String] = {
+    val p = RandomUtils.nextInt(0, totalP)
+    var acc = 0
+    for(idx <- 0 to products.size) {
+      acc += prorities(idx)
+      if(acc>p) {
+        return products(idx)
+      }
+    }
     products(RandomUtils.nextInt(0, products.size))
   }
 }

@@ -1,13 +1,10 @@
-import java.time
 import java.time.temporal.ChronoUnit
 import java.time.{Instant, LocalDate, LocalDateTime}
 import java.util.UUID
-import java.util.concurrent.Future
 
 import com.mekong.dto._
 import com.typesafe.config.ConfigFactory
 import org.apache.commons.lang3.{RandomStringUtils, RandomUtils}
-import org.apache.kafka.clients.producer.RecordMetadata
 import org.slf4j.{Logger, LoggerFactory}
 import stream.Streamer
 
@@ -20,9 +17,9 @@ object App {
 
     val conf = ConfigFactory.load
     val streamer = new Streamer(conf)
-    val timeRangeInput = if (args.size > 0) args(0).toInt else 10
+    val timeRangeInput = conf.getInt("time-range")
     val timeRange = if (timeRangeInput<0) -timeRangeInput else timeRangeInput
-    val numOfCarts = if (args.size > 1) args(1).toInt else 100
+    val numOfCarts = conf.getInt("num-of-carts")
     for(loop <- 0 to numOfCarts) {
       val items=new ArrayBuffer[Order]();
       for(i <-0 to RandomUtils.nextInt(2, 6)) {
