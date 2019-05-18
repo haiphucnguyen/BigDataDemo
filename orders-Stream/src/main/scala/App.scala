@@ -46,18 +46,17 @@ object App {
         items.toList
       );
       streamer.sendCart(cart);
-      items.foreach(i => {
-        var address =ZipCodeDB.nextRandomAddress()
-          val shipping =
-            new ShippingAddress(
-              cart.cardId,
-              address("address"),
-              address("city"),
-              address("zip"),
-              address("state_id")
-          );
-          streamer.sendShipping(shipping);
-      });
+
+      var address =ZipCodeDB.nextRandomAddress()
+      val shipping =
+        new ShippingAddress(
+          cart.cardId,
+          address("address"),
+          address("city"),
+          address("zip"),
+          address("state_id")
+      );
+      streamer.sendShipping(shipping);
 
       while(streamer.getSendingProceses() > 200){
         logger.info("To much message, waiting...")

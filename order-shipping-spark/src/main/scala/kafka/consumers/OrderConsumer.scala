@@ -6,8 +6,10 @@ import com.typesafe.config.Config
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
+import org.slf4j.{Logger, LoggerFactory}
 
 class OrderConsumer(conf: Config, ssc: StreamingContext ) extends BaseConsumer(conf, "kafka.order") {
+  private val logger = LoggerFactory.getLogger(classOf[OrderConsumer])
 
   {
     // Create the stream.
@@ -25,14 +27,14 @@ class OrderConsumer(conf: Config, ssc: StreamingContext ) extends BaseConsumer(c
 
     // now, whenever this Kafka stream produces data the resulting RDD will be printed
     kafkaStream.foreachRDD(r => {
-      println("*** got an RDD, size = " + r.count())
+      logger.info("*** got an RDD, size = " + r.count())
       r.foreach(s => println(s))
       if (r.count() > 0) {
         // let's see how many partitions the resulting RDD has -- notice that it has nothing
         // to do with the number of partitions in the RDD used to publish the data (4), nor
         // the number of partitions of the topic (which also happens to be four.)
-        println("*** " + r.getNumPartitions + " partitions")
-        r.glom().foreach(a => println("*** partition size = " + a.size))
+        logger.info("*** " + r.getNumPartitions + " partitions")
+        r.glom().foreach(a => logger.info("*** partition size = " + a.size))
       }
     })
 

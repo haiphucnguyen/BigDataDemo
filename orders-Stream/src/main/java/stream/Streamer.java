@@ -27,6 +27,7 @@ public class Streamer {
 	
 	private String server;
 	private String orderTopic;
+	private String shippingTopic;
 	private String shipingStatusTopic;
 	private Producer<String, String> producer;
 	private int sendingProceses = 0;
@@ -41,6 +42,7 @@ public class Streamer {
 	public Streamer(Config conf) {
 		server = conf.getString("kafka.server");
 		orderTopic = conf.getString("kafka.order");
+		shippingTopic = conf.getString("kafka.shipping");
 		shipingStatusTopic = conf.getString("kafka.shippingstatus");
 		this.ensureTopic(orderTopic);
 		this.ensureTopic(shipingStatusTopic);		
@@ -88,7 +90,7 @@ public class Streamer {
 
 	public Future<RecordMetadata> sendShipping(ShippingAddress shipping) {
 		logger.info("Sending order message");
-		return this.sendData(this.orderTopic, shipping.cartId().toString(), gson.toJson(shipping));
+		return this.sendData(this.shippingTopic, shipping.cartId().toString(), gson.toJson(shipping));
 	}
 
 	public Future<RecordMetadata> sendShippingStatus(ShippingStatus status) {
