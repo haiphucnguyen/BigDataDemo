@@ -27,10 +27,7 @@ object App {
     consumers += new ShippingStatusConsumer(conf, ssc)
 
     ssc.start()
-    var input: String = ""
-    do {
-      input = scala.io.StdIn.readLine("[press q to quite]")
-    } while (!input.equals("q"))
+    val input = scala.io.StdIn.readLine()
 
     ssc.stop()
   }
