@@ -73,10 +73,7 @@ object App {
       }
     }).start()
 
-    var input: String = ""
-    do {
-      input = scala.io.StdIn.readLine("[press q to quite]")
-    } while (!input.equals("q"))
+    val input = scala.io.StdIn.readLine()
     shutdown = true
     while ( streamer.getSendingProceses > 0) {
       logger.info("Waiting for all message sent ...")
