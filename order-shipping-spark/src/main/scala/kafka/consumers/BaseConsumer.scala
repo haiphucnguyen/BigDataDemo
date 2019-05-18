@@ -20,7 +20,7 @@ abstract class BaseConsumer (conf:Config, topicConfig:String){
   def getBasicStringStringConsumer() : Properties = {
     val consumerConfig: Properties = new Properties
     consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this._server)
-    consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, this._group)
+    consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, this._group + this._topic)
     consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, classOf[StringDeserializer].getCanonicalName)
     consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, classOf[StringDeserializer].getCanonicalName)
     consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")

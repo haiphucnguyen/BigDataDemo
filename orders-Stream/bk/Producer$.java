@@ -1,11 +1,3 @@
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.util.{Properties, UUID}
-
-import com.goyeau.kafka.streams.circe.CirceSerdes
-import com.mekong.dto.{Cart, Id}
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
-
 object Producer {
   def main(args: Array[String]): Unit = {
     writeToKafka("Carts")
