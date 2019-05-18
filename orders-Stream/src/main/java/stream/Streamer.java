@@ -89,7 +89,7 @@ public class Streamer {
 	}
 
 	public Future<RecordMetadata> sendShipping(ShippingAddress shipping) {
-		logger.info("Sending order message");
+		logger.info("Sending shipping message");
 		return this.sendData(this.shippingTopic, shipping.cartId().toString(), gson.toJson(shipping));
 	}
 
