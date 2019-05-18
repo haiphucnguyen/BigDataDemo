@@ -30,7 +30,7 @@ object ProductDB {
 
   val prorities = new mutable.ListBuffer[Integer]
   var totalP = 0
-  for(idx <- 0 to products.size){
+  for(idx <- 0 to products.size-1){
     val p = RandomUtils.nextInt(0, prorities.size * 10000)
     prorities += p
     totalP += p

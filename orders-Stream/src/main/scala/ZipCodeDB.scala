@@ -24,7 +24,7 @@ object ZipCodeDB {
   var totalP = 0
   CITIES.foreach(s => {
     s._2.foreach(c=>{
-      val p = RandomUtils.nextInt(1, citiStates.size*10000);
+      val p = RandomUtils.nextInt(1, 100000);
       totalP += p
       citiStates += Tuple3(p, c , s._1)
     })
@@ -33,22 +33,24 @@ object ZipCodeDB {
   def nextRandomAddress() : Map[String,String] = {
     val p = RandomUtils.nextInt(0, totalP)
     var acc = 0
-    for(idx <- 0 to citiStates.size) {
-      acc += citiStates(idx)(0);
+    for(idx <- 0 to citiStates.size-1) {
+      acc += citiStates(idx)._1;
       if(acc>p) {
         return Map(
           "address" -> RandomStringUtils.randomAlphabetic(10),
-          "city" -> "city",
+          "city" -> citiStates(idx)._2,
           "zip" -> RandomStringUtils.randomNumeric(5),
-          "state" -> STATES(RandomUtils.nextInt(0, STATES.size))
+          "state" -> citiStates(idx)._3
         )
       }
     }
 
+    val idx = RandomUtils.nextInt(0, citiStates.size)
     Map(
-      "address" -> "",
-      "city" -> "",
-      "zip" -> "",
-      "state" -> "")
+      "address" -> RandomStringUtils.randomAlphabetic(10),
+      "city" -> citiStates(idx)._2,
+      "zip" -> RandomStringUtils.randomNumeric(5),
+      "state" -> citiStates(idx)._3
+    )
   }
 }
