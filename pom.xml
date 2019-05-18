@@ -5,20 +5,21 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.my.warehouse</groupId>
+    <groupId>com.mekong.warehouse</groupId>
     <artifactId>demo</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
-
     <modules>
+        <module>dto</module>
         <module>orders-Stream</module>
         <module>spark-stream</module>
-        <module>dto</module>
         <module>order-shipping-spark</module>
+        <module>trial</module>
     </modules>
     <properties>
-        <scala.version>2.12.7</scala.version>
+        <scala.version>2.11.12</scala.version>
+        <scala.binary.version>2.11</scala.binary.version>
         <spark.version>2.4.0</spark.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -27,13 +28,13 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.12</artifactId>
+            <artifactId>spark-core_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.12</artifactId>
+            <artifactId>spark-sql_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
         </dependency>
 
@@ -116,4 +117,10 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>ho</id>
+            <url>http://repo.hortonworks.com/content/repositories/releases/</url>
+        </repository>
+    </repositories>
 </project>
