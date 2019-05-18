@@ -66,5 +66,12 @@
 			<artifactId>dto</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.github.tototoshi</groupId>
+			<artifactId>scala-csv_2.12</artifactId>
+			<version>1.3.5</version>
+		</dependency>
+
 	</dependencies>
 </project>
