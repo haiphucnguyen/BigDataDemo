@@ -20,7 +20,8 @@ object App {
 
     val conf = ConfigFactory.load
     val streamer = new Streamer(conf)
-    val timeRange = if (args.size > 0) args(0).toInt else 10
+    val timeRangeInput = if (args.size > 0) args(0).toInt else 10
+    val timeRange = if (timeRangeInput<0) -timeRangeInput else timeRangeInput
     val numOfCarts = if (args.size > 1) args(1).toInt else 100
     for(loop <- 0 to numOfCarts) {
       val items=new ArrayBuffer[Order]();
@@ -28,7 +29,7 @@ object App {
         val product = ProductDB.nextRandom()
         val item = new Order(
           Id[Order](UUID.randomUUID().toString),
-          product("Id"),
+          product("id"),
           product("category"),
           product("price").toDouble,
           RandomUtils.nextInt(1, 11)
@@ -37,7 +38,7 @@ object App {
       }
 
 
-      val carttime = Instant.now().plus(timeRange, ChronoUnit.MINUTES)
+      val carttime = Instant.now().plus(-timeRange, ChronoUnit.MINUTES)
       val cart = new Cart(
         Id[Cart](UUID.randomUUID().toString),
         RandomStringUtils.randomAlphabetic(10),
@@ -52,9 +53,9 @@ object App {
         new ShippingAddress(
           cart.cardId,
           address("address"),
-          address("city"),
+          "city",
           address("zip"),
-          address("state_id")
+          address("state")
       );
       streamer.sendShipping(shipping);
 
