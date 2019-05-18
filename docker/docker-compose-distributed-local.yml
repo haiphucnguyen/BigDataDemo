@@ -72,7 +72,8 @@ services:
       - 2181:2181
 
   hbase-master:
-    image: bde2020/hbase-master:1.0.0-hbase1.2.6
+    #image: bde2020/hbase-master:1.0.0-hbase1.2.6
+    image: hbase-master:latest
     container_name: hbase-master
     hostname: hbase-master
     env_file:
@@ -83,7 +84,8 @@ services:
       - 16010:16010
 
   hbase-region:
-    image: bde2020/hbase-regionserver:1.0.0-hbase1.2.6
+    #image: bde2020/hbase-regionserver:1.0.0-hbase1.2.6
+    image: hbase-regionserver:latest
     container_name: hbase-regionserver
     hostname: hbase-regionserver
     env_file:
@@ -97,7 +99,7 @@ services:
     image: bde2020/spark-master:2.4.0-hadoop2.8-scala2.12
     container_name: spark-master
     ports:
-      - "8080:8080"
+      - "8082:8080"
       - "7077:7077"
       - "6066:6066"
     environment:
@@ -130,6 +132,18 @@ services:
       - KAFKA_CREATE_TOPICS= "Orders:1:1"
     volumes:
       - ~/Projects/study/demo/shared/kafka:/kafka
+  zeppelin:
+    image: apache/zeppelin:0.8.1
+    container_name: zeppelin
+    ports:
+      - "8080:8080"
+  #hue:
+  #  image: gethue/hue:4.4.0
+  #  container_name: hue
+  #  ports:
+  #    - "8888:8888"
+    #volumes:
+    #  - ~/Projects/study/demo/shared/hue/hue.ini:/usr/share/hue/desktop/conf/z-hue.ini
 volumes:
   hadoop_namenode:
   hadoop_datanode:

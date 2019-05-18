@@ -8,7 +8,7 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
 
 object Producer {
   def main(args: Array[String]): Unit = {
-    writeToKafka("Orders")
+    writeToKafka("Carts")
   }
 
   def writeToKafka(topic: String): Unit = {
