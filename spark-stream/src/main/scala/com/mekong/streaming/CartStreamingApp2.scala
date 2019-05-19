@@ -40,8 +40,8 @@ object CartStreamingApp2 {
     val df = spark
       .readStream
       .format("kafka")
-      .option("kafka.bootstrap.servers", "kafka:9092")
-      .option("bootstrap.servers", "kafka:9092")
+      .option("kafka.bootstrap.servers", "kafka:9093")
+      .option("bootstrap.servers", "kafka:9093ocker")
       .option("startingOffsets", "earliest")
       .option("subscribe", "cart-topic")
       .load()
@@ -59,17 +59,17 @@ object CartStreamingApp2 {
         })
         result
       }).writeStream
-      .foreachBatch((batchDF: Dataset[ArrayBuffer[(String, String, String, Double, Long)]], batchId: Long) => {
-        batchDF.write
-          .format("console")
-          .save()
-      }).start().awaitTermination()
 //      .foreachBatch((batchDF: Dataset[ArrayBuffer[(String, String, String, Double, Long)]], batchId: Long) => {
-//        batchDF.write.options(
-//          Map(HBaseTableCatalog.tableCatalog -> productSales, HBaseTableCatalog.newTable -> "5"))
-//          .format("org.apache.spark.sql.execution.datasources.hbase")
+//        batchDF.write
+//          .format("console")
 //          .save()
 //      }).start().awaitTermination()
+      .foreachBatch((batchDF: Dataset[ArrayBuffer[(String, String, String, Double, Long)]], batchId: Long) => {
+        batchDF.write.options(
+          Map(HBaseTableCatalog.tableCatalog -> productSales, HBaseTableCatalog.newTable -> "5"))
+          .format("org.apache.spark.sql.execution.datasources.hbase")
+          .save()
+      }).start().awaitTermination()
     //      .writeStream.format("console").start()
     //      .awaitTermination()
   }

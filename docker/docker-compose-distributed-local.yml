@@ -71,6 +71,7 @@ services:
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=0.0.0.0:2888:3888
+      ZOO_TICK_TIME: 2000
     ports:
       - 2181:2181
 

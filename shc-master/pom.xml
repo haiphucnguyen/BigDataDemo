@@ -28,7 +28,7 @@
   </parent>
   <groupId>com.hortonworks</groupId>
   <artifactId>shc</artifactId>
-  <version>2.0.4-2.4-s_2.11</version>
+  <version>2.0.5-2.4-s_2.11</version>
   <packaging>pom</packaging>
   <name>HBase Spark Connector Project Parent POM</name>
   <url>https://github.com/hortonworks-spark/shc</url>
@@ -36,7 +36,7 @@
   <properties>
     <maven.version>3.5.4</maven.version>
     <spark.version>2.4.0</spark.version>
-    <hbase.version>2.0.4</hbase.version>
+    <hbase.version>2.0.5</hbase.version>
     <phoenix.version>5.0.0-HBase-2.0</phoenix.version>
     <test_classpath_file>${project.build.directory}/spark-test-classpath.txt</test_classpath_file>
     <java.version>1.8</java.version>
