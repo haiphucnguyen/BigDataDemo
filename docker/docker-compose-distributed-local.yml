@@ -7,7 +7,7 @@ services:
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
     environment:
-      - CLUSTER_NAME=test
+      - CLUSTER_NAME=mekong
     env_file:
       - ./hadoop.env
     ports:
@@ -67,6 +67,7 @@ services:
   zoo:
     image: zookeeper:3.4.10
     container_name: zookeeper
+    restart: always
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=0.0.0.0:2888:3888
@@ -132,17 +133,17 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
     volumes:
       - ~/Projects/study/demo/shared/kafka:/kafka
-  kafka_manager:
-    image: hlebalbau/kafka-manager:2.0.0.2
-    container_name: kafka_manager
-    ports:
-      - "9000:9000"
-    environment:
-      - ZK_HOSTS=zoo:2181
-      - KAFKA_MANAGER_AUTH_ENABLED=true
-      - KAFKA_MANAGER_USERNAME=hai
-      - KAFKA_MANAGER_PASSWORD=hai
-    command: -Dpidfile.path=/dev/null
+  #kafka_manager:
+  #  image: hlebalbau/kafka-manager:2.0.0.2
+  #  container_name: kafka_manager
+  #  ports:
+  #    - "9000:9000"
+  #  environment:
+  #    - ZK_HOSTS=zoo:2181
+  #    - KAFKA_MANAGER_AUTH_ENABLED=true
+  #    - KAFKA_MANAGER_USERNAME=hai
+  #    - KAFKA_MANAGER_PASSWORD=hai
+  #  command: -Dpidfile.path=/dev/null
 
   zeppelin:
     image: apache/zeppelin:0.8.1

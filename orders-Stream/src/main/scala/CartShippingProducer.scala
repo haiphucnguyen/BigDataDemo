@@ -15,13 +15,11 @@ import scala.collection.mutable.ArrayBuffer
 
 object CartShippingProducer {
   def main(args: Array[String]): Unit = {
-    val logger: Logger =
-      LoggerFactory.getLogger(classOf[Streamer])
+    val logger: Logger = LoggerFactory.getLogger(classOf[Streamer])
 
     val conf = ConfigFactory.load
     val streamer = new Streamer(conf)
     val timeRangeInput = conf.getInt("time-range")
-    val timeRange = if (timeRangeInput < 0) -timeRangeInput else timeRangeInput
     val delayTime = conf.getInt("message-delay")
     var shutdown = false
 
@@ -31,7 +29,7 @@ object CartShippingProducer {
     new Thread(new Runnable {
       override def run(): Unit = {
         while (!shutdown) {
-          val items = new ArrayBuffer[Order]();
+          val items = new ArrayBuffer[Order]()
           for (_ <- 0 to RandomUtils.nextInt(2, 6)) {
             val product = ProductDB.nextRandom()
             val item = Order(
@@ -44,12 +42,14 @@ object CartShippingProducer {
             items += item
           }
 
-          val cartTime = Instant.now().plus(-timeRange, ChronoUnit.MINUTES)
+          var timeRange = RandomUtils.nextInt(1, timeRangeInput)
+          timeRange = if (RandomUtils.nextBoolean()) timeRange else -timeRange
+          val cartTime = Instant.now().plus(timeRange, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS)
           val cart = Cart(
             UUID.randomUUID().toString,
             RandomStringUtils.randomAlphabetic(10),
-            cartTime,
-            cartTime.plus(3, ChronoUnit.DAYS),
+            cartTime.getEpochSecond,
+            cartTime.plus(3, ChronoUnit.DAYS).getEpochSecond,
             items.toList
           )
 
@@ -68,7 +68,7 @@ object CartShippingProducer {
 
           while (streamer.getSendingProceses() > 100) {
             logger.info("To much message, waiting...")
-            Thread.sleep(50)
+            Thread.sleep(500)
           }
 
           Thread.sleep(delayTime)
