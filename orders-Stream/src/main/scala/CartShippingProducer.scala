@@ -12,7 +12,7 @@ import stream.Streamer
 
 import scala.collection.mutable.ArrayBuffer
 
-object App {
+object CartShippingProducer {
   def main(args: Array[String]): Unit = {
     val logger: Logger =
       LoggerFactory.getLogger(classOf[Streamer])

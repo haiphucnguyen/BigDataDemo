@@ -131,8 +131,6 @@ services:
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       - KAFKA_LISTENERS=INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
       - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
-      - KAFKA_CREATE_TOPICS= "Orders:1:1"
-      - KAFKA_AUTO_CREATE_TOPICS_ENABLE="true"
     volumes:
       - ~/Projects/study/demo/shared/kafka:/kafka
   kafka_manager:
@@ -141,10 +139,10 @@ services:
     ports:
       - "9000:9000"
     environment:
-      - ZK_HOSTS="zoo:2181"
-      - KAFKA_MANAGER_AUTH_ENABLED="true"
-      - KAFKA_MANAGER_USERNAME="hai"
-      - KAFKA_MANAGER_PASSWORD="hai"
+      - ZK_HOSTS=zoo:2181
+      - KAFKA_MANAGER_AUTH_ENABLED=true
+      - KAFKA_MANAGER_USERNAME=hai
+      - KAFKA_MANAGER_PASSWORD=hai
     command: -Dpidfile.path=/dev/null
 
   zeppelin:

@@ -16,10 +16,8 @@ import com.typesafe.config.Config;
 
 public class Streamer {
 
-
-
 	private String server;
-	private String orderTopic;
+	private String cartTopic;
 	private String shippingTopic;
 	private String shipingStatusTopic;
 	private Producer<String, String> producer;
@@ -34,13 +32,13 @@ public class Streamer {
 
 	public Streamer(Config conf) {
 		server = conf.getString("kafka.server");
-		orderTopic = conf.getString("kafka.order");
+		cartTopic = conf.getString("kafka.cart");
 		shippingTopic = conf.getString("kafka.shipping");
 		shipingStatusTopic = conf.getString("kafka.shippingstatus");
-		this.ensureTopic(orderTopic);
+		this.ensureTopic(cartTopic);
 		this.ensureTopic(shipingStatusTopic);		
 		this.createProducers();
-		logger.info("streamer {} {}", this.server, this.orderTopic);
+		logger.info("streamer {} {}", this.server, this.cartTopic);
 	}	
 	
 	private static final Logger logger = LoggerFactory.getLogger(Streamer.class);
@@ -78,7 +76,7 @@ public class Streamer {
 	}
 
 	public Future<RecordMetadata> sendCart(String cart, String id) {
-		return this.sendData(this.orderTopic, id, cart);
+		return this.sendData(this.cartTopic, id, cart);
 	}
 
 	public Future<RecordMetadata> sendShipping(String shipping, String id) {
