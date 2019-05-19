@@ -1,6 +1,5 @@
 package com.mekong.dto
-
-import java.time.Instant
+import org.joda.time._
 
 case class Cart(cardId: Id[Cart], userId: String, issuedTimestamp: Instant, deliveredOn: Instant,
                 orders: List[Order])

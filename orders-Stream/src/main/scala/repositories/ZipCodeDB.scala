@@ -1,7 +1,8 @@
+package repositories
+
 import org.apache.commons.lang3.{RandomStringUtils, RandomUtils}
 
 import scala.collection.mutable
-
 
 object ZipCodeDB {
   val STATES = Array("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",

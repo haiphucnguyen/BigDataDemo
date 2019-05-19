@@ -54,8 +54,14 @@
         <dependency>
             <groupId>net.liftweb</groupId>
             <artifactId>lift-json_${scala.binary.version}</artifactId>
-            <version>3.2.0</version>
+			<version>${liftweb.json.verion}</version>
         </dependency>
+
+		<dependency>
+			<groupId>net.liftweb</groupId>
+			<artifactId>lift-json-ext_${scala.binary.version}</artifactId>
+			<version>${liftweb.json.verion}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>

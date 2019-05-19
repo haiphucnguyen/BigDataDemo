@@ -7,4 +7,11 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>dto</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>net.liftweb</groupId>
+            <artifactId>lift-json-ext_${scala.binary.version}</artifactId>
+            <version>${liftweb.json.verion}</version>
+        </dependency>
+    </dependencies>
 </project>

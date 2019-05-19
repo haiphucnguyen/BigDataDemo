@@ -1,4 +1,6 @@
-import org.apache.commons.lang3.{RandomStringUtils, RandomUtils}
+package repositories
+
+import org.apache.commons.lang3.RandomUtils
 
 import scala.collection.mutable
 

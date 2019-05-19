@@ -23,6 +23,7 @@
         <spark.version>2.4.0</spark.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <liftweb.json.verion>3.3.0</liftweb.json.verion>
     </properties>
 
     <dependencies>
