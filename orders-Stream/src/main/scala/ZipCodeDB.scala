@@ -13,29 +13,29 @@ object ZipCodeDB {
 
   val CITIES = Map(
     "California" -> List("Los Angeles", "San Francisco", "Orange"),
-    "Texas" -> List("Dallas","Austin","Houston"),
+    "Texas" -> List("Dallas", "Austin", "Houston"),
     "Iowa" -> List("Iowa", "Des Moines", "Fairfield", "Ottumwa"),
-    "New York" -> List("New York","Albany", "Columbia"),
-    "Illinois" -> List("Chicago","Decatur"),
-    "Florida" ->  List("Miami", "Orlando")
+    "New York" -> List("New York", "Albany", "Columbia"),
+    "Illinois" -> List("Chicago", "Decatur"),
+    "Florida" -> List("Miami", "Orlando")
   )
 
-  val citiStates = new mutable.ListBuffer[Tuple3[Integer, String,String]]
+  val citiStates = new mutable.ListBuffer[(Integer, String, String)]
   var totalP = 0
   CITIES.foreach(s => {
-    s._2.foreach(c=>{
-      val p = RandomUtils.nextInt(1, 100000);
+    s._2.foreach(c => {
+      val p = RandomUtils.nextInt(1, 100000)
       totalP += p
-      citiStates += Tuple3(p, c , s._1)
+      citiStates += Tuple3(p, c, s._1)
     })
   })
 
-  def nextRandomAddress() : Map[String,String] = {
+  def nextRandomAddress(): Map[String, String] = {
     val p = RandomUtils.nextInt(0, totalP)
     var acc = 0
-    for(idx <- 0 to citiStates.size-1) {
-      acc += citiStates(idx)._1;
-      if(acc>p) {
+    for (idx <- 0 to citiStates.size - 1) {
+      acc += citiStates(idx)._1
+      if (acc > p) {
         return Map(
           "address" -> RandomStringUtils.randomAlphabetic(10),
           "city" -> citiStates(idx)._2,

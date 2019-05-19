@@ -1,4 +1,4 @@
-import org.apache.commons.lang3.{RandomStringUtils, RandomUtils}
+import org.apache.commons.lang3.RandomUtils
 
 import scala.collection.mutable
 
@@ -30,18 +30,18 @@ object ProductDB {
 
   val prorities = new mutable.ListBuffer[Integer]
   var totalP = 0
-  for(idx <- 0 to products.size-1){
+  for (idx <- 0 to products.size - 1) {
     val p = RandomUtils.nextInt(0, prorities.size * 10000)
     prorities += p
     totalP += p
   }
 
-  def nextRandom(): Map[String,String] = {
+  def nextRandom(): Map[String, String] = {
     val p = RandomUtils.nextInt(0, totalP)
     var acc = 0
-    for(idx <- 0 to products.size) {
+    for (idx <- 0 to products.size) {
       acc += prorities(idx)
-      if(acc>p) {
+      if (acc > p) {
         return products(idx)
       }
     }
