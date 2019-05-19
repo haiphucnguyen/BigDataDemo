@@ -103,7 +103,6 @@ services:
     ports:
       - "8082:8080"
       - "7077:7077"
-      - "6066:6066"
     environment:
       - INIT_DAEMON_STEP=setup_spark
     volumes:

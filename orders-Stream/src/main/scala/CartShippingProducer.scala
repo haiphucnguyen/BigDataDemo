@@ -2,10 +2,11 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.mekong.dto._
 import com.typesafe.config.ConfigFactory
-import net.liftweb.json.Serialization.write
-import net.liftweb.json._
 import org.apache.commons.lang3.{RandomStringUtils, RandomUtils}
 import org.slf4j.{Logger, LoggerFactory}
 import stream.Streamer
@@ -23,32 +24,36 @@ object CartShippingProducer {
     val timeRange = if (timeRangeInput < 0) -timeRangeInput else timeRangeInput
     val delayTime = conf.getInt("message-delay")
     var shutdown = false
-    implicit val formats = DefaultFormats
+
+    val mapper = new ObjectMapper()
+    mapper.registerModules(DefaultScalaModule, new JavaTimeModule())
+
     new Thread(new Runnable {
       override def run(): Unit = {
         while (!shutdown) {
           val items = new ArrayBuffer[Order]();
           for (_ <- 0 to RandomUtils.nextInt(2, 6)) {
             val product = ProductDB.nextRandom()
-            val item = new Order(
-              Id[Order](UUID.randomUUID().toString),
+            val item = Order(
+              UUID.randomUUID().toString,
               product("id"),
               product("category"),
               product("price").toDouble,
-              RandomUtils.nextInt(1, 11)
+              RandomUtils.nextInt(1, 5)
             )
             items += item
           }
 
           val cartTime = Instant.now().plus(-timeRange, ChronoUnit.MINUTES)
-          val cart = new Cart(
-            Id[Cart](UUID.randomUUID().toString),
+          val cart = Cart(
+            UUID.randomUUID().toString,
             RandomStringUtils.randomAlphabetic(10),
             cartTime,
             cartTime.plus(3, ChronoUnit.DAYS),
             items.toList
           )
-          streamer.sendCart(write(cart), cart.cardId.toString)
+
+          streamer.sendCart(mapper.writeValueAsString(cart), cart.cardId.toString)
 
           val address = ZipCodeDB.nextRandomAddress()
           val shipping =
@@ -59,7 +64,7 @@ object CartShippingProducer {
               address("zip"),
               address("state")
             )
-          streamer.sendShipping(write(shipping), shipping.cartId.toString)
+          streamer.sendShipping(mapper.writeValueAsString(shipping), shipping.cartId.toString)
 
           while (streamer.getSendingProceses() > 100) {
             logger.info("To much message, waiting...")

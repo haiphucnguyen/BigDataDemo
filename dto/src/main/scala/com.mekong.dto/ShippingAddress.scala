@@ -1,3 +1,3 @@
 package com.mekong.dto
 
-case class ShippingAddress(cartId: Id[Cart], address: String, city: String, zipCode: String, state: String)
+case class ShippingAddress(cartId: String, address: String, city: String, zipCode: String, state: String)
