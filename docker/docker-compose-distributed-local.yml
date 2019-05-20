@@ -117,6 +117,7 @@ services:
       - spark-master
     ports:
       - "8081:8081"
+      - "4040:4040"
     environment:
       - "SPARK_MASTER=spark://spark-master:7077"
   kafka:
@@ -155,8 +156,6 @@ services:
       - "8080:8080"
     volumes:
       - $PWD/../shared/zeppelin/notebook:/zeppelin/notebook/
-      - $PWD/../shared/zeppelin/interpreter:/zeppelin/interpreter
-      -
 #volumes:
 #  hadoop_namenode:
 #  hadoop_datanode:

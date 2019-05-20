@@ -18,7 +18,7 @@ MAINTAINER Apache Software Foundation <dev@zeppelin.apache.org>
 
 # `Z_VERSION` will be updated by `dev/change_zeppelin_version.sh`
 ENV Z_VERSION="0.8.1"
-ENV SPARK_VERSION="2.4.3"
+ENV SPARK_VERSION="2.4.0"
 ENV SPARK_HOME="/spark"
 ENV HBASE_VERSION="2.0.5"
 ENV HBASE_HOME="/hbase"
@@ -116,7 +116,7 @@ RUN echo "$LOG_TAG Download HBase binary" && \
     wget -O /tmp/hbase-${HBASE_VERSION}-bin.tar.gz http://archive.apache.org/dist/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-bin.tar.gz && \
     tar -zxvf /tmp/hbase-${HBASE_VERSION}-bin.tar.gz && \
     rm -rf /tmp/hbase-${HBASE_VERSION}-bin.tar.gz && \
-    mv /hbase-${HBASE_VERSION}-bin ${HBASE_HOME}
+    mv /hbase-${HBASE_VERSION} ${HBASE_HOME}
 
 COPY zeppelin-env.sh /zeppelin/conf/zeppelin-env.sh
 COPY hbase-site.xml /hbase/conf/hbase-site.xml

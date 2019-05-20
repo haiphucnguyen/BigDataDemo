@@ -70,7 +70,7 @@ export MASTER=spark://spark-master:7077                 		# Spark master url. eg
 ## defining SPARK_HOME makes Zeppelin run spark interpreter process using spark-submit
 ##
 export SPARK_HOME=/spark                             # (required) When it is defined, load it instead of Zeppelin embedded Spark libraries
-# export SPARK_SUBMIT_OPTIONS                   # (optional) extra options to pass to spark submit. eg) "--driver-memory 512M --executor-memory 1G".
+#export SPARK_SUBMIT_OPTIONS="--driver-memory 512M --executor-memory 1G"                   # (optional) extra options to pass to spark submit. eg) "--driver-memory 512M --executor-memory 1G".
 export SPARK_APP_NAME=Zeppelin-Spark                        # (optional) The name of spark application.
 
 ## Use embedded spark binaries ##
@@ -97,8 +97,8 @@ export SPARK_APP_NAME=Zeppelin-Spark                        # (optional) The nam
 
 ## To connect to HBase running on a cluster, either HBASE_HOME or HBASE_CONF_DIR must be set
 
-# export HBASE_HOME=                    # (require) Under which HBase scripts and configuration should be
-# export HBASE_CONF_DIR=                # (optional) Alternatively, configuration directory can be set to point to the directory that has hbase-site.xml
+export HBASE_HOME=/hbase                    # (require) Under which HBase scripts and configuration should be
+export HBASE_CONF_DIR=/hbase/conf                # (optional) Alternatively, configuration directory can be set to point to the directory that has hbase-site.xml
 
 #### ZeppelinHub connection configuration ####
 # export ZEPPELINHUB_API_ADDRESS		# Refers to the address of the ZeppelinHub service in use
