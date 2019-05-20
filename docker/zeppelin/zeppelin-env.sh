@@ -97,8 +97,8 @@ export SPARK_APP_NAME=Zeppelin-Spark                        # (optional) The nam
 
 ## To connect to HBase running on a cluster, either HBASE_HOME or HBASE_CONF_DIR must be set
 
-export HBASE_HOME=/hbase                    # (require) Under which HBase scripts and configuration should be
-export HBASE_CONF_DIR=/hbase/conf                # (optional) Alternatively, configuration directory can be set to point to the directory that has hbase-site.xml
+#export HBASE_HOME=/hbase                    # (require) Under which HBase scripts and configuration should be
+#export HBASE_CONF_DIR=/hbase/conf                # (optional) Alternatively, configuration directory can be set to point to the directory that has hbase-site.xml
 
 #### ZeppelinHub connection configuration ####
 # export ZEPPELINHUB_API_ADDRESS		# Refers to the address of the ZeppelinHub service in use

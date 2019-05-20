@@ -64,9 +64,8 @@ services:
     ports:
       - 8188:8188
       - 19888:19888
-
   zoo:
-    image: zookeeper:3.4.10
+    image: zookeeper:3.4.14
     container_name: zookeeper
     environment:
       ZOO_MY_ID: 1
@@ -117,7 +116,6 @@ services:
       - spark-master
     ports:
       - "8081:8081"
-      - "4040:4040"
     environment:
       - "SPARK_MASTER=spark://spark-master:7077"
   kafka:
@@ -134,8 +132,8 @@ services:
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       - KAFKA_LISTENERS=INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
       - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
-    volumes:
-      - $PWD/../shared/kafka:/kafka
+    #volumes:
+    #  - $PWD/../shared/kafka:/kafka
 
   #kafka_manager:
   #  image: hlebalbau/kafka-manager:2.0.0.2
@@ -150,7 +148,7 @@ services:
   #  command: -Dpidfile.path=/dev/null
 
   zeppelin:
-    image:  zeppelin:latest
+    image: zeppelin:latest
     container_name: zeppelin
     ports:
       - "8080:8080"

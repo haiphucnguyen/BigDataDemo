@@ -20,8 +20,6 @@ MAINTAINER Apache Software Foundation <dev@zeppelin.apache.org>
 ENV Z_VERSION="0.8.1"
 ENV SPARK_VERSION="2.4.0"
 ENV SPARK_HOME="/spark"
-ENV HBASE_VERSION="2.0.5"
-ENV HBASE_HOME="/hbase"
 ENV LOG_TAG="[ZEPPELIN_${Z_VERSION}]:" \
     Z_HOME="/zeppelin" \
     LANG=en_US.UTF-8 \
@@ -112,14 +110,7 @@ RUN echo "$LOG_TAG Download Spark binary" && \
     rm -rf /tmp/spark-${SPARK_VERSION}-bin-hadoop2.7.tgz && \
     mv /spark-${SPARK_VERSION}-bin-hadoop2.7 ${SPARK_HOME}
 
-RUN echo "$LOG_TAG Download HBase binary" && \
-    wget -O /tmp/hbase-${HBASE_VERSION}-bin.tar.gz http://archive.apache.org/dist/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-bin.tar.gz && \
-    tar -zxvf /tmp/hbase-${HBASE_VERSION}-bin.tar.gz && \
-    rm -rf /tmp/hbase-${HBASE_VERSION}-bin.tar.gz && \
-    mv /hbase-${HBASE_VERSION} ${HBASE_HOME}
-
 COPY zeppelin-env.sh /zeppelin/conf/zeppelin-env.sh
-COPY hbase-site.xml /hbase/conf/hbase-site.xml
 RUN chmod +x /zeppelin/conf/zeppelin-env.sh
 
 EXPOSE 8080
