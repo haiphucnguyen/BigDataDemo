@@ -4,20 +4,21 @@ services:
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
     container_name: namenode
-    volumes:
-      - hadoop_namenode:/hadoop/dfs/name
+    #volumes:
+    #  - hadoop_namenode:/hadoop/dfs/name
     environment:
-      - CLUSTER_NAME=mekong
+      - CLUSTER_NAME=test
     env_file:
       - ./hadoop.env
     ports:
+      - 8020:8020
       - 50070:50070
 
   datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
     container_name: datanode
-    volumes:
-      - hadoop_datanode:/hadoop/dfs/data
+    #volumes:
+    #  - hadoop_datanode:/hadoop/dfs/data
     environment:
       SERVICE_PRECONDITION: "namenode:50070"
     env_file:
@@ -52,8 +53,8 @@ services:
   historyserver:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
     container_name: historyserver
-    volumes:
-      - hadoop_historyserver:/hadoop/yarn/timeline
+    #volumes:
+    #  - hadoop_historyserver:/hadoop/yarn/timeline
     environment:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 resourcemanager:8088"
     depends_on:
@@ -67,11 +68,10 @@ services:
   zoo:
     image: zookeeper:3.4.10
     container_name: zookeeper
-    restart: always
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=0.0.0.0:2888:3888
-      ZOO_TICK_TIME: 2000
+      ZOO_TICK_TIME: 6000
     ports:
       - 2181:2181
 
@@ -85,6 +85,7 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181"
     ports:
+      - 16000:16000
       - 16010:16010
 
   hbase-region:
@@ -108,7 +109,7 @@ services:
     environment:
       - INIT_DAEMON_STEP=setup_spark
     volumes:
-      - ~/Projects/study/demo/shared:/data
+      - $PWD/../shared:/data
   spark-worker-1:
     image: bde2020/spark-worker:2.4.0-hadoop2.7
     container_name: spark-worker-1
@@ -133,7 +134,8 @@ services:
       - KAFKA_LISTENERS=INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
       - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
     volumes:
-      - ~/Projects/study/demo/shared/kafka:/kafka
+      - $PWD/../shared/kafka:/kafka
+
   #kafka_manager:
   #  image: hlebalbau/kafka-manager:2.0.0.2
   #  container_name: kafka_manager
@@ -147,11 +149,15 @@ services:
   #  command: -Dpidfile.path=/dev/null
 
   zeppelin:
-    image: apache/zeppelin:0.8.1
+    image:  zeppelin:latest
     container_name: zeppelin
     ports:
       - "8080:8080"
-volumes:
-  hadoop_namenode:
-  hadoop_datanode:
-  hadoop_historyserver:
+    volumes:
+      - $PWD/../shared/zeppelin/notebook:/zeppelin/notebook/
+      - $PWD/../shared/zeppelin/interpreter:/zeppelin/interpreter
+      -
+#volumes:
+#  hadoop_namenode:
+#  hadoop_datanode:
+#  hadoop_historyserver:

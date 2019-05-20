@@ -10,7 +10,6 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>cart-producer</artifactId>
-	<name>Cart Producer</name>
 
 	<dependencies>
 		<dependency>

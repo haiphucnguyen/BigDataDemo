@@ -10,17 +10,19 @@ import org.apache.spark.sql.{SparkSession, _}
 
 import scala.collection.mutable.ArrayBuffer
 
+case class ProductSalesRecord(rowKey: String, proId: String, category: String, value: Double, issueTimestamp: Long)
+
 object CartStreamingApp2 {
   val productSales =
     s"""{
        |"table":{"namespace":"default", "name":"productSalesTbl", "tableCoder":"PrimitiveType"},
        |"rowkey":"key",
        |"columns":{
-       |"col0":{"cf":"rowkey", "col":"key", "type":"string"},
-       |"col1":{"cf":"cf1", "col":"proId", "type":"string"},
-       |"col2":{"cf":"cf1", "col":"category", "type":"string"},
-       |"col3":{"cf":"cf2", "col":"value", "type":"double"},
-       |"col4":{"cf":"cf3", "col":"issueTimestamp", "type":"bigint"}
+       |"rowKey":{"cf":"rowkey", "col":"key", "type":"string"},
+       |"proId":{"cf":"cf1", "col":"proId", "type":"string"},
+       |"category":{"cf":"cf2", "col":"category", "type":"string"},
+       |"value":{"cf":"cf3", "col":"value", "type":"double"},
+       |"issueTimestamp":{"cf":"cf4", "col":"issueTimestamp", "type":"bigint"}
        |}
        |}""".stripMargin
 
@@ -36,12 +38,12 @@ object CartStreamingApp2 {
       .appName("Cart Streaming Processing")
       .config("spark.driver.allowMultipleContexts", "true")
       .getOrCreate()
+    spark.sparkContext.master
 
     val df = spark
       .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "kafka:9093")
-      .option("bootstrap.servers", "kafka:9093ocker")
       .option("startingOffsets", "earliest")
       .option("subscribe", "cart-topic")
       .load()
@@ -51,25 +53,25 @@ object CartStreamingApp2 {
       .as[(String, String)].toDF()
       .map(row => row.getString(1)).map(value => jsonMapper().readValue(value, classOf[Cart]))
       .map(cart => {
-        val result = new ArrayBuffer[(String, String, String, Double, Long)]()
+        val result = new ArrayBuffer[ProductSalesRecord]()
         val orders = cart.orders
         orders.foreach(order => {
-          result += new Tuple5[String, String, String, Double, Long](order.productId, order.productId, order.productCategory,
+          result += ProductSalesRecord(order.productId, order.productId, order.productCategory,
             order.amount * order.price, cart.issuedTimestamp)
         })
         result
       }).writeStream
-//      .foreachBatch((batchDF: Dataset[ArrayBuffer[(String, String, String, Double, Long)]], batchId: Long) => {
-//        batchDF.write
-//          .format("console")
-//          .save()
-//      }).start().awaitTermination()
-      .foreachBatch((batchDF: Dataset[ArrayBuffer[(String, String, String, Double, Long)]], batchId: Long) => {
-        batchDF.write.options(
-          Map(HBaseTableCatalog.tableCatalog -> productSales, HBaseTableCatalog.newTable -> "5"))
-          .format("org.apache.spark.sql.execution.datasources.hbase")
-          .save()
-      }).start().awaitTermination()
+      //      .foreachBatch((batchDF: Dataset[ArrayBuffer[(String, String, String, Double, Long)]], batchId: Long) => {
+      //        batchDF.write
+      //          .format("console")
+      //          .save()
+      //      }).start().awaitTermination()
+      .foreachBatch((batchDF: Dataset[ArrayBuffer[ProductSalesRecord]], _: Long) => {
+      batchDF.write.options(
+        Map(HBaseTableCatalog.tableCatalog -> productSales, HBaseTableCatalog.newTable -> "5"))
+        .format("org.apache.spark.sql.execution.datasources.hbase")
+        .save()
+    }).start().awaitTermination()
     //      .writeStream.format("console").start()
     //      .awaitTermination()
   }
