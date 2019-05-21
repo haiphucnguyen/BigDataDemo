@@ -49,56 +49,77 @@ services:
       - resourcemanager
     ports:
       - 8042:8042
+  hive-server:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    env_file:
+      - ./hadoop-hive.env
+    environment:
+      HIVE_CORE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore/metastore"
+      SERVICE_PRECONDITION: "hive-metastore:9083"
+    ports:
+      - "10000:10000"
+  hive-metastore:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    env_file:
+      - ./hadoop-hive.env
+    command: /opt/hive/bin/hive --service metastore
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 hive-metastore-postgresql:5432"
+    ports:
+      - "9083:9083"
+  hive-metastore-postgresql:
+    image: bde2020/hive-metastore-postgresql:2.3.0
 
-  historyserver:
-    image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
-    container_name: historyserver
+
+    #historyserver:
+  #  image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
+  #  container_name: historyserver
     #volumes:
     #  - hadoop_historyserver:/hadoop/yarn/timeline
-    environment:
-      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 resourcemanager:8088"
-    depends_on:
-      - resourcemanager
-    env_file:
-      - ./hadoop.env
-    ports:
-      - 8188:8188
-      - 19888:19888
+  #  environment:
+  #    SERVICE_PRECONDITION: "namenode:50070 datanode:50075 resourcemanager:8088"
+  #  depends_on:
+  #    - resourcemanager
+  #  env_file:
+  #    - ./hadoop.env
+  #  ports:
+  #    - 8188:8188
+  #    - 19888:19888
   zoo:
-    image: zookeeper:3.4.14
+    image: zookeeper:3.4.10
     container_name: zookeeper
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=0.0.0.0:2888:3888
-      ZOO_TICK_TIME: 6000
+      ZOO_TICK_TIME: 15000
     ports:
       - 2181:2181
 
-  hbase-master:
+  #hbase-master:
     #image: bde2020/hbase-master:1.0.0-hbase1.2.6
-    image: hbase-master:latest
-    container_name: hbase-master
-    hostname: hbase-master
-    env_file:
-      - ./hbase-distributed-local.env
-    environment:
-      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181"
-    ports:
-      - 16000:16000
-      - 16010:16010
+  #  image: hbase-master:latest
+  #  container_name: hbase-master
+  #  hostname: hbase-master
+  #  env_file:
+  #    - ./hbase-distributed-local.env
+  #  environment:
+  #    SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181"
+  #  ports:
+  #    - 16000:16000
 
-  hbase-region:
+  #hbase-region:
     #image: bde2020/hbase-regionserver:1.0.0-hbase1.2.6
-    image: hbase-regionserver:latest
-    container_name: hbase-regionserver
-    hostname: hbase-regionserver
-    env_file:
-      - ./hbase-distributed-local.env
-    environment:
-      HBASE_CONF_hbase_regionserver_hostname: hbase-region
-      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181 hbase-master:16010"
-    ports:
-      - 16030:16030
+    #image: hbase-regionserver:latest
+    #container_name: hbase-regionserver
+    #hostname: hbase-regionserver
+    #env_file:
+    #  - ./hbase-distributed-local.env
+    #environment:
+    #  HBASE_HEAPSIZE: 2048M
+    #  HBASE_CONF_hbase_regionserver_hostname: hbase-region
+    #  SERVICE_PRECONDITION: "namenode:50070 datanode:50075 zoo:2181 hbase-master:16010"
+    #ports:
+    #  - 16030:16030
   spark-master:
     image: bde2020/spark-master:2.4.0-hadoop2.7
     container_name: spark-master
@@ -135,17 +156,17 @@ services:
     #volumes:
     #  - $PWD/../shared/kafka:/kafka
 
-  #kafka_manager:
-  #  image: hlebalbau/kafka-manager:2.0.0.2
-  #  container_name: kafka_manager
-  #  ports:
-  #    - "9000:9000"
-  #  environment:
-  #    - ZK_HOSTS=zoo:2181
-  #    - KAFKA_MANAGER_AUTH_ENABLED=true
-  #    - KAFKA_MANAGER_USERNAME=hai
-  #    - KAFKA_MANAGER_PASSWORD=hai
-  #  command: -Dpidfile.path=/dev/null
+  kafka_manager:
+    image: hlebalbau/kafka-manager:2.0.0.2
+    container_name: kafka_manager
+    ports:
+      - "9000:9000"
+    environment:
+      - ZK_HOSTS=zoo:2181
+      #- KAFKA_MANAGER_AUTH_ENABLED=true
+      #- KAFKA_MANAGER_USERNAME=hai
+      #- KAFKA_MANAGER_PASSWORD=hai
+    command: -Dpidfile.path=/dev/null
 
   zeppelin:
     image: zeppelin:latest

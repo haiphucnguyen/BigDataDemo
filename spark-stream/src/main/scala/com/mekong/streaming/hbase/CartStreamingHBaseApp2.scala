@@ -1,20 +1,16 @@
-package com.mekong.streaming
+package com.mekong.streaming.hbase
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.mekong.dto.Cart
-import org.apache.spark.sql.catalyst.expressions.AttributeReference
 import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog
 import org.apache.spark.sql.{SparkSession, _}
 
 import scala.collection.mutable.ArrayBuffer
 
-case class ProductSalesRecord(itemKey: String, productId: String, productCategory: String, totalAmount: Double, issueTimeStamp: Long)
-
-object CartStreamingApp2 {
-  AttributeReference
+object CartStreamingHBaseApp2 {
   val productSales =
     s"""{
        |"table":{"namespace":"default", "name":"productSalesTbl", "tableCoder":"PrimitiveType"},
@@ -38,9 +34,7 @@ object CartStreamingApp2 {
 
     val spark = SparkSession.builder()
       .appName("Cart Streaming Processing")
-      .config("spark.driver.allowMultipleContexts", "true")
       .getOrCreate()
-    spark.sparkContext.master
 
     val df = spark
       .readStream

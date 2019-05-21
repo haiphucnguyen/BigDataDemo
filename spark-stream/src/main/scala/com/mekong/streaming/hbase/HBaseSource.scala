@@ -18,7 +18,7 @@
  * the Apache Software License, Version 2.0.
  */
 
-package com.mekong.streaming
+package com.mekong.streaming.hbase
 
 import org.apache.spark.sql.execution.datasources.hbase._
 import org.apache.spark.sql.{DataFrame, SparkSession}

@@ -68,7 +68,7 @@ object CartShippingProducer {
 
           while (streamer.getSendingProceses() > 100) {
             logger.info("To much message, waiting...")
-            Thread.sleep(500)
+            Thread.sleep(50)
           }
 
           Thread.sleep(delayTime)
