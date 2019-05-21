@@ -15,7 +15,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 import scala.collection.mutable.ArrayBuffer
 
-object CartStreamingHBaseApp {
+object CartStreamingHBaseBatchApp {
   val productSales =
     s"""{
        |"table":{"namespace":"default", "name":"productSalesTbl", "tableCoder":"PrimitiveType"},
