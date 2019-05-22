@@ -62,10 +62,9 @@ object CartStreamingHiveApp {
         })
         result
       }).foreachRDD(rdd => {
-
       import sqlContext.implicits._
-      rdd.flatMap(item => item.toList).toDF().write.mode(SaveMode.Append).format("hive").saveAsTable("ProductSale")
-
+      rdd.flatMap(item => item.toList).toDF().write.mode(SaveMode.Append).format("hive")
+        .saveAsTable("ProductSale")
     })
 
     ssc.start() // Start the computation
