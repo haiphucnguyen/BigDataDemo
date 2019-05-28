@@ -29,10 +29,19 @@ In addition, Java 8 and Scala 2.11 is required.
 The technology stack
 ====================
 
-* Hadoop 2.7
+* Hadoop 2.7.0
 * Spark 2.4
 * Kafka 2.0.1
 * HBase 2.0.5
 * Cassandra 3.0.4
 * Hive 2.3.2
 * ZooKeeper 3.4.14
+
+Credits
+=======
+
+The first version of this project starts with the base project [https://github.com/big-data-europe/docker-hbase](https://github.com/big-data-europe/docker-hbase) when I need to set up the 
+couple services of HBase, Hadoop, ZooKeeper. It was fitted to my needs though the HBase is 1.2.6 while I like to work with HBase 2.0.5 so I created the new Dockerfile base on the old ones. Later, 
+I added more images like Kafka, Hive and demonstrate my works with Hadoop, Kafka, Spark, Hive, ZooKeeper and more.  
+
+

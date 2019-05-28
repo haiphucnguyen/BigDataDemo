@@ -50,7 +50,7 @@ services:
     ports:
       - 8042:8042
   hive-server:
-    container: hive-server
+    container_name: hive-server
     image: bde2020/hive:2.3.2-postgresql-metastore
     env_file:
       - ./hadoop-hive.env
@@ -60,7 +60,7 @@ services:
     ports:
       - "10000:10000"
   hive-metastore:
-    contaoner: hive-metastore
+    container_name: hive-metastore
     image: bde2020/hive:2.3.2-postgresql-metastore
     env_file:
       - ./hadoop-hive.env
@@ -70,7 +70,7 @@ services:
     ports:
       - "9083:9083"
   hive-metastore-postgresql:
-    container: hive-metastore-postgresql
+    container_name: hive-metastore-postgresql
     image: bde2020/hive-metastore-postgresql:2.3.0
 
 
