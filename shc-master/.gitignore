@@ -1,7 +1,0 @@
-#IDE
-.idea/
-*.iml
-
-# Maven
-target/
-
