@@ -23,7 +23,7 @@ You must install [Docker](https://www.docker.com/) on your machine.
 
 I develop the entire project uses Scala, Java on IntelliJ. If you want to enhance this project, I recommend to use IntelliJ as well.
 
-In addition, Java 8 and Scala 2.11 is required.
+In addition, Java 8 and Scala 2.12 is required.
 
 
 The technology stack
@@ -32,7 +32,6 @@ The technology stack
 * Hadoop 2.7.0
 * Spark 2.4
 * Kafka 2.0.1
-* HBase 2.0.5
 * Cassandra 3.0.4
 * Hive 2.3.2
 * ZooKeeper 3.4.14

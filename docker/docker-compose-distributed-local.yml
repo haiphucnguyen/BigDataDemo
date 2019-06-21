@@ -73,7 +73,6 @@ services:
     container_name: hive-metastore-postgresql
     image: bde2020/hive-metastore-postgresql:2.3.0
 
-
   historyserver:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
     container_name: historyserver

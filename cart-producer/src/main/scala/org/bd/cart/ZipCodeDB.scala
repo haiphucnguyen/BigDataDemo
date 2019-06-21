@@ -1,3 +1,5 @@
+package org.bd.cart
+
 import org.apache.commons.lang3.{RandomStringUtils, RandomUtils}
 
 import scala.collection.mutable
