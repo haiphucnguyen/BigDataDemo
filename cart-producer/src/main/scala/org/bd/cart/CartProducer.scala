@@ -28,51 +28,53 @@ object CartProducer {
     val mapper = new ObjectMapper()
     mapper.registerModules(DefaultScalaModule, new JavaTimeModule())
 
-    new Thread(() => {
-      while (!shutdown) {
-        val items = new ArrayBuffer[Order]()
-        for (_ <- 0 to RandomUtils.nextInt(2, 6)) {
-          val product = ProductDB.nextRandom()
-          val item = Order(
+    new Thread(new Runnable {
+      override def run(): Unit = {
+        while (!shutdown) {
+          val items = new ArrayBuffer[Order]()
+          for (_ <- 0 to RandomUtils.nextInt(2, 6)) {
+            val product = ProductDB.nextRandom()
+            val item = Order(
+              UUID.randomUUID().toString,
+              product("id"),
+              product("category"),
+              product("price").toDouble,
+              RandomUtils.nextInt(1, 5)
+            )
+            items += item
+          }
+
+          var timeRange = RandomUtils.nextInt(1, timeRangeInput)
+          timeRange = if (RandomUtils.nextBoolean()) timeRange else -timeRange
+          val cartTime = Instant.now().plus(timeRange, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS)
+          val cart = Cart(
             UUID.randomUUID().toString,
-            product("id"),
-            product("category"),
-            product("price").toDouble,
-            RandomUtils.nextInt(1, 5)
+            RandomStringUtils.randomAlphabetic(10),
+            cartTime.getEpochSecond,
+            cartTime.plus(3, ChronoUnit.DAYS).getEpochSecond,
+            items.toList
           )
-          items += item
+
+          streamer.sendCart(mapper.writeValueAsString(cart), cart.cardId.toString)
+
+          val address = ZipCodeDB.nextRandomAddress()
+          val shipping =
+            ShippingAddress(
+              cart.cardId,
+              address("address"),
+              "city",
+              address("zip"),
+              address("state")
+            )
+          streamer.sendShipping(mapper.writeValueAsString(shipping), shipping.cartId.toString)
+
+          while (streamer.getSendingProceses() > 100) {
+            logger.info("To much message, waiting...")
+            Thread.sleep(50)
+          }
+
+          Thread.sleep(delayTime)
         }
-
-        var timeRange = RandomUtils.nextInt(1, timeRangeInput)
-        timeRange = if (RandomUtils.nextBoolean()) timeRange else -timeRange
-        val cartTime = Instant.now().plus(timeRange, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS)
-        val cart = Cart(
-          UUID.randomUUID().toString,
-          RandomStringUtils.randomAlphabetic(10),
-          cartTime.getEpochSecond,
-          cartTime.plus(3, ChronoUnit.DAYS).getEpochSecond,
-          items.toList
-        )
-
-        streamer.sendCart(mapper.writeValueAsString(cart), cart.cardId.toString)
-
-        val address = ZipCodeDB.nextRandomAddress()
-        val shipping =
-          ShippingAddress(
-            cart.cardId,
-            address("address"),
-            "city",
-            address("zip"),
-            address("state")
-          )
-        streamer.sendShipping(mapper.writeValueAsString(shipping), shipping.cartId.toString)
-
-        while (streamer.getSendingProceses() > 100) {
-          logger.info("To much message, waiting...")
-          Thread.sleep(50)
-        }
-
-        Thread.sleep(delayTime)
       }
     }).start()
 
