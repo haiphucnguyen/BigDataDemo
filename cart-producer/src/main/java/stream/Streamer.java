@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.typesafe.config.Config;
 
 public class Streamer {
+	private static final Logger logger = LoggerFactory.getLogger(Streamer.class);
 
 	private String server;
 	private String cartTopic;
@@ -39,10 +40,7 @@ public class Streamer {
 		this.ensureTopic(shipingStatusTopic);		
 		this.createProducers();
 		logger.info("streamer {} {}", this.server, this.cartTopic);
-	}	
-	
-	private static final Logger logger = LoggerFactory.getLogger(Streamer.class);
-
+	}
 	
 	private void ensureTopic(String topic) {
 		Properties props = new Properties();

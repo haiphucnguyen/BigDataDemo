@@ -27,6 +27,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
@@ -109,8 +115,6 @@
                 </executions>
             </plugin>
             <!-- Maven Assembly Plugin -->
-
-
         </plugins>
     </build>
     <repositories>

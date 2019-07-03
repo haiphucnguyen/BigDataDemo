@@ -16,9 +16,10 @@ import stream.Streamer
 import scala.collection.mutable.ArrayBuffer
 
 object CartProducer {
-  def main(args: Array[String]): Unit = {
-    val logger: Logger = LoggerFactory.getLogger(classOf[Streamer])
 
+  val logger: Logger = LoggerFactory.getLogger(classOf[Streamer])
+
+  def main(args: Array[String]): Unit = {
     val conf = ConfigFactory.load
     val streamer = new Streamer(conf)
     val timeRangeInput = conf.getInt("time-range")

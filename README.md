@@ -29,12 +29,23 @@ In addition, Java 8 and Scala 2.12 is required.
 The technology stack
 ====================
 
-* Hadoop 2.8.0
+* Hadoop 2.7.0
 * Spark 2.4
 * Kafka 2.0.2
 * Cassandra 3.0.4
 * Hive 2.3.2
 * ZooKeeper 3.4.14
+* Jupyter latest
+
+How to run the demo
+===================
+
+```puml
+[AA] <<static lib>>
+[BB] <<shared lib>>
+[CC] <<static lib>>
+
+```
 
 Credits
 =======

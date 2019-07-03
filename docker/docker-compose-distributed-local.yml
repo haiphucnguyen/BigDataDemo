@@ -144,13 +144,19 @@ services:
       #- KAFKA_MANAGER_PASSWORD=hai
     command: -Dpidfile.path=/dev/null
 
-  zeppelin:
-    image: apache/zeppelin:0.8.1
-    container_name: zeppelin
+  cassandra:
+    image: cassandra:3.11.4
+    container_name: cassandra
     ports:
-      - "8080:8080"
+      - "7000:7000"
+
+  jupyter:
+    image: mycollab/jupyter-hive:latest
+    container_name: jupyter
+    ports:
+      - "8888:8888"
     volumes:
-      - $PWD/../shared/zeppelin/notebook:/zeppelin/notebook/
+      - $PWD/jupyter/shared:/home/jovyan/work
 #volumes:
 #  hadoop_namenode:
 #  hadoop_datanode:
