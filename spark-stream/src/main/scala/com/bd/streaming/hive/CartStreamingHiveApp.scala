@@ -1,4 +1,4 @@
-package com.mekong.streaming.hive
+package com.bd.streaming.hive
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule

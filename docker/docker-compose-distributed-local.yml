@@ -132,17 +132,17 @@ services:
     #volumes:
     #  - $PWD/../shared/kafka:/kafka
 
-  kafka_manager:
-    image: hlebalbau/kafka-manager:2.0.0.2
-    container_name: kafka_manager
-    ports:
-      - "9000:9000"
-    environment:
-      - ZK_HOSTS=zoo:2181
+  #kafka_manager:
+  #  image: hlebalbau/kafka-manager:2.0.0.2
+  #  container_name: kafka_manager
+  #  ports:
+  #    - "9000:9000"
+  #  environment:
+  #    - ZK_HOSTS=zoo:2181
       #- KAFKA_MANAGER_AUTH_ENABLED=true
       #- KAFKA_MANAGER_USERNAME=hai
       #- KAFKA_MANAGER_PASSWORD=hai
-    command: -Dpidfile.path=/dev/null
+  #  command: -Dpidfile.path=/dev/null
 
   cassandra:
     image: cassandra:3.11.4
@@ -156,7 +156,7 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - $PWD/jupyter/shared:/home/jovyan/work
+      - $PWD/docker/jupyter/shared:/home/jovyan/work
 #volumes:
 #  hadoop_namenode:
 #  hadoop_datanode:

@@ -1,4 +1,4 @@
-package com.mekong.streaming.cassandra
+package com.bd.streaming.cassandra
 
 import org.apache.kafka.common.serialization.StringDeserializer
 
