@@ -1,5 +1,5 @@
 This project contains the demo of the big data technologies such as Hadoop, Spark, Hbase,
-Hive, etc.  Instead of using the Cloudera quickstart distribution, which contains the built-in
+Hive, etc.  Instead of using the [Cloudera quickstart distribution](https://hub.docker.com/r/cloudera/quickstart/), which contains the built-in
 Hadoop, HBase, etc. and most of them are outdated versions. For example, with the latest Cloudera quickstart
 version that released 3 years ago, and its software versions:
 
