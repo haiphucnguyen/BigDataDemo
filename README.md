@@ -19,7 +19,9 @@ later. I hope you find it is useful as well and I am willing to support when you
 Requirements
 ============
 
-You must install [Docker](https://www.docker.com/) on your machine.
+* You must install [Docker](https://www.docker.com/) on your machine.
+
+* You should allocate at least 4 GB for your docker. I recommend 6 GB if you have enough resource. Go to Docker Desktop > Preferences > Advanced to configure the available RAM for docker.
 
 I develop the entire project uses Scala, Java on IntelliJ. If you want to enhance this project, I recommend to use IntelliJ as well.
 
@@ -37,15 +39,28 @@ The technology stack
 * ZooKeeper 3.4.14
 * Jupyter latest
 
+Business Model 
+===================
+
+It simulates the real e-commerce business 
+
+![Business model](Big-Data-Demo.png)
+
 How to run the demo
 ===================
 
-```puml
-[AA] <<static lib>>
-[BB] <<shared lib>>
-[CC] <<static lib>>
 
-```
+## Start all services
+
+Run the script 'run-all-services.sh' 
+
+## Run kafka producer
+
+## Deploy and run Spark streaming job
+
+## Verify data on HDFS
+
+## Run report on Jupyter
 
 Credits
 =======
