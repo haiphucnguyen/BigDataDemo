@@ -151,7 +151,7 @@ services:
       - "7000:7000"
 
   jupyter:
-    image: mycollab/jupyter-hive:latest
+    image: mycollab/jupyter-bigdata:latest
     container_name: jupyter
     ports:
       - "8888:8888"
