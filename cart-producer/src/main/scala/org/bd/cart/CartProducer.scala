@@ -10,14 +10,13 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.mekong.dto._
 import com.typesafe.config.ConfigFactory
 import org.apache.commons.lang3.{RandomStringUtils, RandomUtils}
-import org.slf4j.{Logger, LoggerFactory}
-import stream.Streamer
+import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.ArrayBuffer
 
 object CartProducer {
 
-  val logger: Logger = LoggerFactory.getLogger(classOf[Streamer])
+  val logger = LoggerFactory.getLogger(classOf[Streamer])
 
   def main(args: Array[String]): Unit = {
     val conf = ConfigFactory.load
@@ -69,7 +68,7 @@ object CartProducer {
             )
           streamer.sendShipping(mapper.writeValueAsString(shipping), shipping.cartId.toString)
 
-          while (streamer.getSendingProceses() > 100) {
+          while (streamer.isOverload()) {
             logger.info("To much message, waiting...")
             Thread.sleep(50)
           }
@@ -81,7 +80,7 @@ object CartProducer {
 
     val input = scala.io.StdIn.readLine()
     shutdown = true
-    while (streamer.getSendingProceses > 0) {
+    while (streamer.isBusy()) {
       logger.info("Waiting for all message sent ...")
       Thread.sleep(50)
     }

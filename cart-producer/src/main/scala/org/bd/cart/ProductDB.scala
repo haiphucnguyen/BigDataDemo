@@ -30,19 +30,20 @@ object ProductDB {
     Map("id" -> "HP Touchscreen", "category" -> "HP Laptop", "price" -> "522")
   )
 
-  val prorities = new mutable.ListBuffer[Integer]
+  val priorities = new mutable.ListBuffer[Integer]
   var totalP = 0
-  for (idx <- products.indices) {
-    val p = RandomUtils.nextInt(0, prorities.size * 10000)
-    prorities += p
-    totalP += p
-  }
+
+   products.foreach(_ => {
+     val p = RandomUtils.nextInt(0, priorities.size * 10000)
+     priorities += p
+     totalP += p
+   })
 
   def nextRandom(): Map[String, String] = {
     val p = RandomUtils.nextInt(0, totalP)
     var acc = 0
     for (idx <- 0 to products.size) {
-      acc += prorities(idx)
+      acc += priorities(idx)
       if (acc > p) {
         return products(idx)
       }
