@@ -1,4 +1,4 @@
-mvnw install
+gradlew install
 
 docker cp spark-stream/target/cart-stream-processing-jar-with-dependencies.jar spark-master:data
 

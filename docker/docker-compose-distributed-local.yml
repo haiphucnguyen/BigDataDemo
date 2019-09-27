@@ -132,23 +132,33 @@ services:
     #volumes:
     #  - $PWD/../shared/kafka:/kafka
 
-  #kafka_manager:
-  #  image: hlebalbau/kafka-manager:2.0.0.2
-  #  container_name: kafka_manager
-  #  ports:
-  #    - "9000:9000"
-  #  environment:
-  #    - ZK_HOSTS=zoo:2181
-      #- KAFKA_MANAGER_AUTH_ENABLED=true
-      #- KAFKA_MANAGER_USERNAME=hai
-      #- KAFKA_MANAGER_PASSWORD=hai
-  #  command: -Dpidfile.path=/dev/null
+  kafka_manager:
+    image: hlebalbau/kafka-manager:2.0.0.2
+    container_name: kafka_manager
+    ports:
+      - "9000:9000"
+    environment:
+      - ZK_HOSTS=zoo:2181
+      - KAFKA_MANAGER_AUTH_ENABLED=true
+      - KAFKA_MANAGER_USERNAME=hai
+      - KAFKA_MANAGER_PASSWORD=hai
+    command: -Dpidfile.path=/dev/null
 
   cassandra:
     image: cassandra:3.11.4
     container_name: cassandra
     ports:
       - "7000:7000"
+
+  postgres:
+    image: postgres:latest
+    container_name: shopping_cart_postgres
+    environment:
+      - "TZ=Europe/Amsterdam"
+      - "POSTGRES_USER=shopping_cart"
+      - "POSTGRES_PASSWORD=shopping_cart"
+    ports:
+      - "5432:5432"  # credentials (shopping_cart:shopping_cart)
 
   jupyter:
     image: mycollab/jupyter-bigdata:latest

@@ -1,4 +1,4 @@
-mvnw install
+gradle build
 
 cd cart-producer
-./../mvnw exec:java -Dexec.mainClass="org.bd.cart.CartProducer" -Dexec.args="ex"
+./../gradlew run
